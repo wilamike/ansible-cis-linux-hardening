@@ -1,0 +1,16 @@
+---
+- name: Harden the image
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    ssh_use_pam: true # to allow access with our key on ec2
+ 
+  tasks:
+
+    - include_role:
+        name: dev-sec.os-hardening
+
+    - include_role:
+        name: dev-sec.ssh-hardening
+

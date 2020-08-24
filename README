@@ -1,13 +1,9 @@
-# ansible-redhat-hardening
-Ansible roles to harden Redhat 7 and 8 on AWS or GCP according to CIS framework. This is developed based on:
+## Project description
 
-* Redhat 8 - https://github.com/jwacross/RHEL8-CIS
-* Redhat 7 - https://github.com/ansible-lockdown/RHEL7-CIS
+Create ansible roles and scripts to harden Redhat 7/8 and CentOS 7/8, especially for the usage on AWS and GCP. The project is tested with inspec with below two profiles:
 
-The project is tested with inspec with below profile:
-
+* dev-sec linux baseline - https://github.com/dev-sec/linux-baseline
 * dev-sec cis-dil-benchmark - https://github.com/dev-sec/cis-dil-benchmark
-
 
 ---
 
@@ -15,15 +11,30 @@ The project is tested with inspec with below profile:
 
 ### To run on AWS EC2 or GCE instance locally (Apply for RHEL7 and RHEL8):
 
+* Start an instance with 4 extra volume (If you don't care about the mount point CIS-DIL items, you can start with the default 1 single volume image)
 
 * Install git
 ```
 sudo yum install git
 ```
 
+* Pull the project from bitbucket
+
+* Run below to move /home, /var, /var/log and /var/log/audit to the volumes and reboot (If you don't care about the mount point CIS-DIL items, skip this step)
+```
+scripts/move_dir.sh 
+```
+
+* After system is up, install ansible and ansible galaxy roles
+
 * Run baseline hardening
 ```
 ansible-playbook ansible/server_baseline_hardening.yml
+```
+
+* Run below to verify baseline
+```
+sudo CHEF_LICENSE=accept inspec exec https://github.com/dev-sec/linux-baseline 
 ```
 
 * Run cis-dil hardening
@@ -31,7 +42,15 @@ ansible-playbook ansible/server_baseline_hardening.yml
 ansible-playbook ansible/server_cisdil_hardening.yml
 ```
 
-* Reboot
+* Run below script to remount /var/tmp (It will be persistent after reload)
+```
+scripts/vartmp_mount.sh
+```
+
+* Run below to verify cls-dil
+```
+sudo CHEF_LICENSE=accept inspec exec https://github.com/dev-sec/cis-dil-benchmark
+```
 
 ---
 
@@ -61,6 +80,8 @@ Below is the respective output from Redhat 7 and onward.
      ×  Kernel Module vfat is expected to be disabled
 ```
 
+* This Ansible role fixes /var/tmp mount point with proper security settings and updates /etc/fstab for persistent behaviours. However the adhoc mount does not work properly, which seems to be an underlying issue of Ansible. Run the script scripts/vartmp_mount.sh to ad-hoc mount after playbook execution. 
+
 * The tests in cis-dil mandate /home, /var, /var/log and /var/log/audit to be mounted to dedicated partition. If you don't care about it as the nature that Cloud VM is ephemeral, you may skip the steps to move them to the new volumes. Below messages will be returned as a result:
 ```
   ×  cis-dil-benchmark-1.1.6: Ensure separate partition exists for /var
@@ -74,8 +95,10 @@ Below is the respective output from Redhat 7 and onward.
   ×  cis-dil-benchmark-1.1.14: Ensure nodev option set on /home partition
      ×  Mount /home options is expected to include "nodev"
 ```
+
 ---
+
 ## Workaround
 
-* An empty GRUB password is added by this Ansible roles to pass the respective cis-dil test. It won't reduce the security of Cloud VM as the boot menu is not accessible.
+* An empty GRUB password is added by this Ansible roles to pass the respective cis-dil test. It won't reduce the security of Cloud VM as the boot menu is not accessible. 
 

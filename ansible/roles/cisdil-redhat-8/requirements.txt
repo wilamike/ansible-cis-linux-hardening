@@ -1,0 +1,4 @@
+tox
+molecule
+docker
+python-vagrant==0.5.15

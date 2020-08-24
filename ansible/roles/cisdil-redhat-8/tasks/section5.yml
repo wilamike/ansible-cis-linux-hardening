@@ -1,0 +1,815 @@
+- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled"
+  service:
+      name: crond
+      enabled: yes
+  when:
+      - rhel8cis_rule_5_1_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.1
+
+- name: "SCORED | 5.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
+  file:
+      dest: /etc/crontab
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel8cis_rule_5_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.2
+
+- name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
+  file:
+      dest: /etc/cron.hourly
+      state: directory
+      owner: root
+      group: root
+      mode: 0700
+  when:
+      - rhel8cis_rule_5_1_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.3
+
+- name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
+  file:
+      dest: /etc/cron.daily
+      state: directory
+      owner: root
+      group: root
+      mode: 0700
+  when:
+      - rhel8cis_rule_5_1_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.4
+
+- name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
+  file:
+      dest: /etc/cron.weekly
+      state: directory
+      owner: root
+      group: root
+      mode: 0700
+  when:
+      - rhel8cis_rule_5_1_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.5
+
+- name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
+  file:
+      dest: /etc/cron.monthly
+      state: directory
+      owner: root
+      group: root
+      mode: 0700
+  when:
+      - rhel8cis_rule_5_1_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.6
+
+- name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
+  file:
+      dest: /etc/cron.d
+      state: directory
+      owner: root
+      group: root
+      mode: 0700
+  when:
+      - rhel8cis_rule_5_1_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.7
+
+- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+  block:
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/at.deny
+            state: absent
+
+      - name: "SCORED | 5.1.8 | PATCH | Check if at.allow exists"
+        stat:
+            path: "/etc/at.allow"
+        register: p
+
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/at.allow
+            state: '{{ "file" if  p.stat.exists else "touch" }}'
+            owner: root
+            group: root
+            mode: 0600
+
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/cron.deny
+            state: absent
+
+      - name: "SCORED | 5.1.8 | PATCH | Check if cron.allow exists"
+        stat:
+            path: "/etc/cron.allow"
+        register: p
+
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+        file:
+            dest: /etc/cron.allow
+            state: '{{ "file" if  p.stat.exists else "touch" }}'
+            owner: root
+            group: root
+            mode: 0600
+  when:
+      - rhel8cis_rule_5_1_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.1.8
+
+- name: "SCORED | 5.2.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
+  file:
+      dest: /etc/ssh/sshd_config
+      state: file
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel8cis_rule_5_2_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.1
+
+- name: "SCORED | 5.2.5 | PATCH | Ensure SSH LogLevel is appropriate"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^LogLevel'
+      line: 'LogLevel INFO'
+  when:
+      - rhel8cis_rule_5_2_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.5
+
+- name: "SCORED | 5.2.6 | PATCH | Ensure SSH X11 forwarding is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^X11Forwarding'
+      line: 'X11Forwarding no'
+  when:
+      - rhel8cis_rule_5_2_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.6
+
+- name: "SCORED | 5.2.7 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?MaxAuthTries \d'
+      line: 'MaxAuthTries 4'
+  when:
+      - rhel8cis_rule_5_2_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.7
+
+- name: "SCORED | 5.2.8 | PATCH | Ensure SSH IgnoreRhosts is enabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^IgnoreRhosts'
+      line: 'IgnoreRhosts yes'
+  when:
+      - rhel8cis_rule_5_2_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.8
+
+- name: "SCORED | 5.2.9 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^HostbasedAuthentication'
+      line: 'HostbasedAuthentication no'
+  when:
+      - rhel8cis_rule_5_2_9|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.9
+
+- name: "SCORED | 5.2.10 | PATCH | Ensure SSH root login is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin'
+      line: 'PermitRootLogin no'
+  when:
+      - rhel8cis_rule_5_2_10|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.10
+
+- name: "SCORED | 5.2.11 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitEmptyPasswords'
+      line: 'PermitEmptyPasswords no'
+  when:
+      - rhel8cis_rule_5_2_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.11
+
+- name: "SCORED | 5.2.12 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitUserEnvironment'
+      line: 'PermitUserEnvironment no'
+  when:
+      - rhel8cis_rule_5_2_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.12
+
+- name: "SCORED | 5.2.13 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+  block:
+      - name: "SCORED | 5.2.13 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveInterval'
+            line: "ClientAliveInterval {{ rhel8cis_sshd['clientaliveinterval'] }}"
+
+      - name: "SCORED | 5.2.13 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveCountMax'
+            line: "ClientAliveCountMax {{ rhel8cis_sshd['clientalivecountmax'] }}"
+  when:
+      - rhel8cis_rule_5_2_13|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.13
+
+- name: "SCORED | 5.2.14 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^LoginGraceTime'
+      line: "LoginGraceTime {{ rhel8cis_sshd['logingracetime'] }}"
+  when:
+      - rhel8cis_rule_5_2_14|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.14
+
+- name: "SCORED | 5.2.20 | PATCH | Ensure system-wide crypto policy is not over-ridden"
+  lineinfile:
+      state: present
+      dest: /etc/sysconfig/sshd
+      regexp: '^CRYPTO_POLICY'
+      line: "# CRYPTO_POLICY="
+  when:
+      - rhel8cis_rule_5_2_20|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.20
+
+- name: "SCORED | 5.2.2 | PATCH | Ensure SSH access is limited"
+  block:
+      - name: "SCORED | 5.2.2 | PATCH | Ensure SSH access is limited - allowusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^AllowUsers"
+            line: AllowUsers {{ rhel8cis_sshd['allowusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel8cis_sshd['allowusers']|default('') != ''"
+
+      - name: "SCORED | 5.2.2 | PATCH | Ensure SSH access is limited - allowgroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^AllowGroups"
+            line: AllowGroups {{ rhel8cis_sshd['allowgroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel8cis_sshd['allowgroups']|default('') != ''"
+
+      - name: "SCORED | 5.2.2 | PATCH | Ensure SSH access is limited - denyusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^DenyUsers"
+            line: DenyUsers {{ rhel8cis_sshd['denyusers'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel8cis_sshd['denyusers']|default('') != ''"
+
+      - name: "SCORED | 5.2.2 | PATCH | Ensure SSH access is limited - denygroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: "^DenyGroups"
+            line: DenyGroups {{ rhel8cis_sshd['denygroups'] }}
+        notify:
+            - restart sshd
+        when:
+            - "rhel8cis_sshd['denygroups']|default('') != ''"
+  when:
+      - rhel8cis_rule_5_2_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.12
+
+- name: "SCORED | 5.2.3 | PATCH | Ensure permissions on SSH private host key files are configured"
+  shell: |
+    - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
+    - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \;
+  ignore_errors: yes
+  when:
+      - rhel8cis_rule_5_2_3|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.2.3
+
+- name: "SCORED | 5.2.4 | PATCH | Ensure permissions on SSH public host key files are configured"
+  shell: |
+    - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 0644 {} \;
+    - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \;
+  ignore_errors: yes
+  when:
+      - rhel8cis_rule_5_2_4|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.2.4
+
+- name: "SCORED | 5.2.15 | PATCH | Ensure SSH warning banner is configured"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Banner'
+      line: 'Banner /etc/issue.net'
+  when:
+      - rhel8cis_rule_5_2_15|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.15
+
+- name: "SCORED | 5.2.16 | PATCH | Ensure SSH PAM is enabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^UsePAM'
+      line: 'UsePAM yes'
+  when:
+      - rhel8cis_rule_5_2_16|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.2.16
+
+- name: "SCORED | 5.2.17 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^AllowTcpForwarding'
+      line: 'AllowTcpForwarding no'
+  when:
+      - rhel8cis_rule_5_2_17|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.17
+
+- name: "SCORED | 5.2.18 | PATCH | Ensure SSH MaxStartups is configured"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^maxstartups'
+      line: 'maxstartups 10:30:60'
+  when:
+      - rhel8cis_rule_5_2_18|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.2.18
+
+- name: "SCORED | 5.2.19 | PATCH | Ensure SSH MaxSessions is set to 4 or less"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^MaxSessions'
+      line: 'MaxSessions 4'
+  when:
+      - rhel8cis_rule_5_2_19|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.2.19
+
+- name: "SCORED | 5.3.1 | PATCH | Create custom authselect profile"
+  command: authselect create-profile custom-profile -b sssd --symlink-meta
+  ignore_errors: yes
+  when:
+      - rhel8cis_rule_5_3_1|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.3.1
+
+#- name: "SCORED | 5.3.2 | PATCH | Select authselect profile"
+#  command: authselect select custom/custom-profile with-sudo with-faillock without-nullok
+#  when:
+#      - rhel8cis_rule_5_3_2|bool
+#  tags:
+#      - level1
+#      - patch
+#      - rule_5.3.2
+
+- name: "SCORED | 5.3.3 | PATCH | Ensure authselect includes with-faillock"
+  command: authselect select custom/custom-profile with-sudo with-faillock without-nullok --force
+  when:
+      - rhel8cis_rule_5_3_3|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.3.3
+
+- name: "SCORED | 5.4.1 | PATCH | Ensure password creation requirements are configured"
+  lineinfile:
+      state: present
+      dest: /etc/security/pwquality.conf
+      regexp: '^{{ item.key }}'
+      line: '{{ item.key }} = {{ item.value }}'
+  with_items:
+      - { key: 'minlen', value: '14' }
+      - { key: 'dcredit', value: '-1' }
+      - { key: 'ucredit', value: '-1' }
+      - { key: 'ocredit', value: '-1' }
+      - { key: 'lcredit', value: '-1' }
+  when:
+      - rhel8cis_rule_5_4_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.1
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts is configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel8cis_rule_5_4_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.2
+      - notimplemented
+
+- name: "SCORED | 5.4.3 | PATCH | Ensure password reuse is limited"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel8cis_rule_5_4_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.3
+      - notimplemented
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure password hashing algorithm is SHA-512"
+  command: authconfig --passalgo=sha512 --update
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel8cis_rule_5_4_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.4.4
+
+- name: "SCORED | 5.5.1.1 | PATCH | Ensure password expiration is 365 days or less"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: '^PASS_MAX_DAYS'
+      line: "PASS_MAX_DAYS {{ rhel8cis_pass['max_days'] }}"
+  when:
+      - rhel8cis_rule_5_5_1_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.1.1
+
+- name: "SCORED | 5.5.1.2 | PATCH | Ensure minimum days between password changes is 7 or more"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: '^PASS_MIN_DAYS'
+      line: "PASS_MIN_DAYS {{ rhel8cis_pass['min_days'] }}"
+  when:
+      - rhel8cis_rule_5_5_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.1.2
+
+- name: "SCORED | 5.5.1.3 | PATCH | Ensure password expiration warning days is 7 or more"
+  lineinfile:
+      state: present
+      dest: /etc/login.defs
+      regexp: '^PASS_WARN_AGE'
+      line: "PASS_WARN_AGE {{ rhel8cis_pass['warn_age'] }}"
+  when:
+      - rhel8cis_rule_5_5_1_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.1.3
+
+- name: "SCORED | 5.5.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
+  shell: |
+    - useradd -D -f 30
+    - chage --inactive 30 
+  when:
+      - rhel8cis_rule_5_5_1_4|bool
+  ignore_errors: yes
+  tags:
+      - level1
+      - patch
+      - rule_5.5.1.4
+
+- name: "SCORED | 5.5.1.5 | PATCH | Ensure all users last password change date is in the past"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel8cis_rule_5_5_1_5|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.5.1.5
+
+- name: "SCORED | 5.5.2 | PATCH | Ensure system accounts are secured"
+  shell: "awk -F: '($3 < {{ rhel8cis_rule_5_4_2_min_uid }}) {print $1 }' /etc/passwd"
+  changed_when: no
+  register: system_account
+  when:
+      - rhel8cis_rule_5_5_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.2
+
+- name: "SCORED | 5.5.2 | PATCH | Ensure system accounts are secured"
+  user:
+      name: "{{ item }}"
+      password_lock: true
+  with_items:
+      - "{{ system_account.stdout_lines }}"
+  when:
+      - rhel8cis_rule_5_5_2|bool
+      - item != "root"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.2
+
+- name: "SCORED | 5.5.2 | PATCH | Ensure system accounts are secured"
+  user:
+      name: "{{ item }}"
+      shell: /sbin/nologin
+  with_items:
+      - "{{ system_account.stdout_lines }}"
+  when:
+      - rhel8cis_rule_5_5_2|bool
+      - item != "root"
+      - item != "sync"
+      - item != "shutdown"
+      - item != "halt"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.2
+
+- name: "SCORED | 5.5.4 | PATCH | Ensure default group for the root account is GID 0"
+  command: usermod -g 0 root
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel8cis_rule_5_5_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.4
+
+- name: "SCORED | 5.5.3 | PATCH | Ensure default user shell timeout is 900 seconds or less"
+  lineinfile:
+      state: present
+      dest: /etc/{{ item }}
+      regexp: '^readonly'
+      line: 'readonly TMOUT=900 2>/dev/null; export TMOUT'
+  ignore_errors: yes
+  with_items:
+      - bashrc
+      - profile
+      - profile.d/*.sh
+  when:
+      - rhel8cis_rule_5_5_3|bool
+  tags:
+      - level1
+      - patch
+      - rule_5.5.3
+
+- name: "SCORED | 5.5.5 | PATCH | Ensure default user umask is 027 or more restrictive"
+  block:
+      - name: "SCORED | 5.5.5 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/bashrc"
+        replace:
+            path: /etc/bashrc
+            regexp: '(^\s+umask) (002|022)'
+            replace: '\1 027'
+
+      - name: "SCORED | 5.5.5 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/profile"
+        replace:
+            path: /etc/profile
+            regexp: '(^\s+umask) (002|022)'
+            replace: '\1 027'
+  when:
+      - rhel8cis_rule_5_5_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5.5
+
+- name: "NOTSCORED | 5.6 | PATCH | Ensure root login is restricted to system console"
+  command: /bin/true
+  changed_when: no
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.5
+      - notimplemented
+
+- name: "SCORED | 5.7 | PATCH | Ensure access to the su command is restricted"
+  lineinfile:
+      state: present
+      dest: /etc/pam.d/su
+      regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
+      line: 'auth           required        pam_wheel.so use_uid'
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.6
+
+- name: "SCORED | 5.7 | PATCH | Ensure access to the su command is restricted - wheel group contains root"
+  user:
+      name: root
+      groups: wheel
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.6
+
+# https://access.redhat.com/solutions/5027331
+- name: "CIS_DIL | C.5.3.1 | Ensure password reuse is limited"
+  block:
+
+    - name: "Remove password retry setting if defined in /etc/authselect/custom/custom-profile/system-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/system-auth"
+        regexp: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
+        state: absent
+
+    - name: "Remove password retry setting if defined in /etc/authselect/custom/custom-profile/password-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/password-auth"
+        regexp: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
+        state: absent
+
+    - name: "Add password retry in /etc/authselect/custom/custom-profile/system-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/system-auth"
+        insertbefore: '^password(\s+)requisite(\s+)(.*)$'
+        line: "password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3"
+        state: present
+
+    - name: "Add password retry in /etc/authselect/custom/custom-profile/password-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/password-auth"
+        insertbefore: '^password(\s+)requisite(\s+)(.*)$'
+        line: "password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3"
+        state: present
+
+    - name: "Apply changes"
+      command: "authselect apply-changes"
+
+- name: "CIS_DIL | C.5.3.3 | Ensure password reuse is limited"
+  block:
+
+    - name: "Remove password history setting if defined in /etc/authselect/custom/custom-profile/system-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/system-auth"
+        regexp: '^password(\s+)requisite(\s+)pam_pwhistory.so(.*)$'
+        state: absent
+
+    - name: "Remove password history setting if defined in /etc/authselect/custom/custom-profile/password-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/password-auth"
+        regexp: '^password(\s+)requisite(\s+)pam_pwhistory.so(.*)$'
+        state: absent
+
+    - name: "Keep history of used passwords in /etc/authselect/custom/custom-profile/system-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/system-auth"
+        insertafter: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
+        line: "password   requisite      pam_pwhistory.so remember=5 use_authtok"
+        state: present
+
+    - name: "Keep history of used passwords in /etc/authselect/custom/custom-profile/password-auth"
+      lineinfile:
+        path: "/etc/authselect/custom/custom-profile/password-auth"
+        insertafter: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
+        line: "password   requisite      pam_pwhistory.so remember=5 use_authtok"
+        state: present
+
+    - name: "Apply changes"
+      command: "authselect apply-changes"
+
+- name: "CIS-DIL | C.5.4.1.4 | Ensure inactive password lock is 30 days or less"
+  replace:
+    path: /etc/default/useradd
+    regexp: 'INACTIVE=(.*)'
+    replace: 'INACTIVE=30'
+

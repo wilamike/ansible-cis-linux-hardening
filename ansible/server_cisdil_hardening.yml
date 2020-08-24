@@ -1,0 +1,12 @@
+---
+- name: Harden the image
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    ssh_use_pam: true # to allow access with our key on ec2
+ 
+  tasks:
+
+    - include_role:
+        name: cisdil-{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version }}
