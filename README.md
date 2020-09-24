@@ -21,6 +21,12 @@ The project is tested with inspec with below profile:
 sudo yum install git
 ```
 
+* Install CIS DIL galaxy role
+```
+ansible-galaxy install dev-sec.os-hardening dev-sec.ssh-hardening
+```
+
+
 * Run baseline hardening
 ```
 ansible-playbook ansible/server_baseline_hardening.yml
