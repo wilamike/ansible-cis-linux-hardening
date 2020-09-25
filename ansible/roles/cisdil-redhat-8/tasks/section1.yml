@@ -946,15 +946,15 @@
       - patch
       - rule_1.8.2
 
-#- name: "SCORED | 1.11 | PATCH | Ensure system-wide crypto policy is FUTURE or FIPS"
-#  shell: |
-#    update-crypto-policies --set FUTURE
-#    update-crypto-policies
-#  when:
-#      - rhel8cis_rule_1_11|bool
-#  tags:
-#      - level1
-#      - level2
-#      - patch
-#      - rule_1.11
-#      - crypto
+- name: "SCORED | 1.11 | PATCH | Ensure system-wide crypto policy is FUTURE or FIPS"
+  shell: |
+    update-crypto-policies --set FUTURE
+    update-crypto-policies
+  when:
+      - rhel8cis_rule_1_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_1.11
+      - crypto

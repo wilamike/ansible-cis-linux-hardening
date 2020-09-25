@@ -2,7 +2,7 @@
   lineinfile:
       dest: /etc/audit/auditd.conf
       regexp: "^max_log_file( |=)"
-      line: "max_log_file = 10"
+      line: "max_log_file = 32"
       state: present
   when:
       - rhel8cis_rule_4_1_2_1|bool
@@ -362,7 +362,7 @@
 - name: "SCORED | 4.1.17 | PATCH | Ensure the audit configuration is immutable"
   template:
       src: audit/rhel7cis_rule_4_1_18.rules.j2
-      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_18.rules
+      dest: /etc/audit/rules.d/99-finalize.rules
       owner: root
       group: root
       mode: 0600
