@@ -337,6 +337,8 @@ rhel7cis_ntp_server_options: "iburst"
 
 # 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
 rhel7cis_host_allow:
+    - "192.168.0.0/24"
+    - "ALL"
     - "0.0.0.0/0"
     - "10.0.0.0/255.0.0.0"
     - "172.16.0.0/255.240.0.0"
@@ -351,7 +353,7 @@ rhel7cis_firewall_services:
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
-    Authorized uses only. All activity may be monitored and reported.
+    All activities may be monitored and reported. Authorized uses only.
 # End Banner
 
 ## Section4 vars
@@ -363,6 +365,10 @@ rhel7cis_auditd:
 rhel7cis_logrotate: "daily"
 
 rhel7cis_sudolog: /var/log/sudo.log
+
+# 4.2.1.4 Ensure ryslsog is configured to send logs to a remote log host
+rhel7cis_rsyslog_destination:
+   - localhost
 
 ## Section5 vars
 

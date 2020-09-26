@@ -91,9 +91,15 @@
   tags:
       - skip_ansible_lint
 
-- name: grub2cfg
+- name: grub2cfg to /boot/grub2/grub.cfg
   command: /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
   ignore_errors: True
+  listen: grub2cfg
+
+- name: grub2cfg to /boot/efi/EFI/redhat/grub.cfg
+  command: /sbin/grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+  ignore_errors: True
+  listen: grub2cfg
 
 - name: restart rsyslog
   command: /sbin/service rsyslog restart
