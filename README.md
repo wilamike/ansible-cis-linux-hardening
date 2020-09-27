@@ -16,11 +16,6 @@ The project is tested with inspec with below profile:
 ### To run on AWS EC2 or GCE instance locally (Apply for RHEL7 and RHEL8):
 
 
-* Install git
-```
-sudo yum install git
-```
-
 * Install CIS DIL galaxy role
 ```
 ansible-galaxy install dev-sec.os-hardening dev-sec.ssh-hardening
