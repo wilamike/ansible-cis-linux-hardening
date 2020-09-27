@@ -16,7 +16,7 @@
   tags:
     - workaround
 
-- debug: var=temp
+# - debug: var=temp
 
 - name: "SCORED | 1.1.7 | WORKAROUND | Force execution of /var/tmp mount"
   shell: /usr/bin/mount -t tmpfs /var/tmp -o defaults,nodev,nosuid,noexec,bind
@@ -24,7 +24,7 @@
   tags:
     - workaround
 
-- debug: var=temp
+# - debug: var=temp
 
 - name: "SCORED | 1.1.7 | WORKAROUND | Force execution of /var/tmp mount"
   shell: /usr/bin/mount 
@@ -32,4 +32,4 @@
   tags:
     - workaround
 
-- debug: var=temp
+# - debug: var=temp
