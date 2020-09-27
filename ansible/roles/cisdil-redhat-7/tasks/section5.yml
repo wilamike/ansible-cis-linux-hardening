@@ -645,8 +645,12 @@
       - rule_5.4.4
 
 - name: "NOTSCORED | 5.5 | PATCH | Ensure root login is restricted to system console"
-  command: /bin/true
-  changed_when: no
+  copy:
+      src: etc/securetty
+      dest: /etc/securetty
+      owner: root
+      group: root
+      mode: 0400
   tags:
       - level1
       - level2
@@ -721,20 +725,13 @@
     - "/etc/pam.d/system-auth"
 
 - name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
-  block:
+  lineinfile:
+    path: "{{ item }}"
+    insertafter: '^password(\s+)(requisite|required)(\s+)pam_pwquality.so(.*)$'
+    regexp: "^password(\\s+)(requisite|required)(\\s+)pam_pwhistory.so(.*)$"
+    line: "password   required      pam_pwhistory.so remember=5 use_authtok"
+    state: present
+  with_items:
+    - "/etc/pam.d/password-auth"
+    - "/etc/pam.d/system-auth"
 
-    - name: "Keep history of used passwords in /etc/pam.d/system-auth"
-      lineinfile:
-        path: "/etc/pam.d/system-auth"
-        insertafter: '^password(\s+)(requisite|required)(\s+)pam_pwquality.so(.*)$'
-        regexp: "^password(\\s+)requisite(\\s+)pam_pwhistory.so(.*)$"
-        line: "password   requisite      pam_pwhistory.so remember=5 use_authtok"
-        state: present
-
-    - name: "Keep history of used passwords in /etc/pam.d/password-auth"
-      lineinfile:
-        path: "/etc/pam.d/password-auth"
-        insertafter: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
-        regexp: "^password(\\s+)requisite(\\s+)pam_pwhistory.so(.*)$"
-        line: "password   requisite      pam_pwhistory.so remember=5 use_authtok"
-        state: present
