@@ -74,13 +74,13 @@
       - rule_4.1.2
 
 - name: "SCORED | 4.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
-  replace:
+  lineinfile:
       dest: /etc/default/grub
-      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
-      replace: '\1"\2 audit=1"'
-      follow: yes
+      regexp: '^(GRUB_CMDLINE_LINUX=.*(?!.*audit=1)\"[^\"]+)(\".*)'
+      line: '\1 audit=1\2'
+      backrefs: yes
   ignore_errors: yes
-  notify: generate new grub config
+  notify: grub2cfg
   when:
       - rhel7cis_rule_4_1_3|bool
   tags:
