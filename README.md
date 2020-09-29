@@ -79,35 +79,32 @@ Below is the respective output from Redhat 7 and onward.
 * The below files are set with file permission 0000 instead of 0600 in order to pass Tenable scan test. Below errors are expected.
 
 ```
-× cis-dil-benchmark-6.1.3: Ensure permissions on /etc/shadow are configured (2 failed)
-✔ File /etc/shadow is expected to exist
-× File /etc/shadow is expected to be readable by owner
-expected File /etc/shadow to be readable by owner
-× File /etc/shadow is expected to be writable by owner
-expected File /etc/shadow to be writable by owner
+  × cis-dil-benchmark-6.1.3: Ensure permissions on /etc/shadow are configured (2 failed)
+    ✔ File /etc/shadow is expected to exist
+    × File /etc/shadow is expected to be readable by owner
+      expected File /etc/shadow to be readable by owner
+    × File /etc/shadow is expected to be writable by owner
+      expected File /etc/shadow to be writable by owner
 
+  × cis-dil-benchmark-6.1.5: Ensure permissions on /etc/gshadow are configured (2 failed)
+    ✔ File /etc/gshadow is expected to exist
+    × File /etc/gshadow is expected to be readable by owner
+      expected File /etc/gshadow to be readable by owner
+    × File /etc/gshadow is expected to be writable by owner
+      expected File /etc/gshadow to be writable by owner
 
-× cis-dil-benchmark-6.1.5: Ensure permissions on /etc/gshadow are configured (2 failed)
-✔ File /etc/gshadow is expected to exist
-× File /etc/gshadow is expected to be readable by owner
-expected File /etc/gshadow to be readable by owner
-× File /etc/gshadow is expected to be writable by owner
-expected File /etc/gshadow to be writable by owner
+  × cis-dil-benchmark-6.1.7: Ensure permissions on /etc/shadow- are configured (2 failed)
+    ✔ File /etc/shadow- is expected to exist
+    × File /etc/shadow- is expected to be readable by owner
+      expected File /etc/shadow- to be readable by owner
+    × File /etc/shadow- is expected to be writable by owner
+      expected File /etc/shadow- to be writable by owner
 
-
-× cis-dil-benchmark-6.1.7: Ensure permissions on /etc/shadow- are configured (2 failed)
-✔ File /etc/shadow- is expected to exist
-× File /etc/shadow- is expected to be readable by owner
-expected File /etc/shadow- to be readable by owner
-× File /etc/shadow- is expected to be writable by owner
-expected File /etc/shadow- to be writable by owner
-
-
-× cis-dil-benchmark-6.1.9: Ensure permissions on /etc/gshadow- are configured (2 failed)
-✔ File /etc/gshadow- is expected to exist
-× File /etc/gshadow- is expected to be readable by owner
-expected File /etc/gshadow- to be readable by owner
-× File /etc/gshadow- is expected to be writable by owner
+  × cis-dil-benchmark-6.1.9: Ensure permissions on /etc/gshadow- are configured (2 failed)
+    ✔ File /etc/gshadow- is expected to exist
+    × File /etc/gshadow- is expected to be readable by owner
+      expected File /etc/gshadow- to be readable by owner
+    × File /etc/gshadow- is expected to be writable by owner
 ```
 
 ---
