@@ -948,7 +948,7 @@
 
 - name: "SCORED | 1.11 | PATCH | Ensure system-wide crypto policy is FUTURE or FIPS"
   shell: |
-    update-crypto-policies --set FUTURE
+    update-crypto-policies --set FIPS
     update-crypto-policies
   when:
       - rhel8cis_rule_1_11|bool
