@@ -675,11 +675,10 @@
       - name: "NOTSCORED | 1.5.3 | PATCH | Ensure authentication required for single user mode - Emergency"
         lineinfile:
             dest: /usr/lib/systemd/system/emergency.service
-            regexp: '/sbin/sulogin'
+            regexp: '^ExecStart=.*systemd-sulogin.*'
             line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
         when:
             - rhel8cis_rule_1_5_3|bool
-            - ansible_distribution_major_version == 7
         tags:
             - level1
             - level2
@@ -688,11 +687,10 @@
       - name: "NOTSCORED | 1.5.3 | PATCH | Ensure authentication required for single user mode - Rescue"
         lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
-            regexp: '/sbin/sulogin'
+            regexp: '^ExecStart=.*systemd-sulogin.*'
             line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
         when:
             - rhel8cis_rule_1_5_3|bool
-            - ansible_distribution_major_version == 7
         tags:
             - level1
             - level2

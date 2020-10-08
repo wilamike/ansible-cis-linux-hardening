@@ -492,13 +492,18 @@
 
 - name: "SCORED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
   lineinfile:
-      dest: /etc/rsyslog.d/*.conf
-      line: '{{ item.value }}'
+      dest: "{{ item.0 }}"
+      line: '*.* @@{{ item.1 }}'
       state: present
       insertafter: yes
   ignore_errors: yes
-  with_items:
-    - { value: '*.* @@loghost.example.com' }
+  loop: "{{ 
+    lookup('fileglob', '/etc/rsyslog.d/*.conf', wantlist=True) 
+    | default([])
+    | union([ '/etc/rsyslog.conf' ])
+    | product(rhel8cis_rsyslog_destination) 
+    | list 
+  }}"
   when:
       - rhel8cis_rule_4_2_1_5|bool
   tags:
@@ -508,22 +513,21 @@
       - rule_4.2.1.5
       - notimplemented
 
-- name: "SCORED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
-  lineinfile:
-      dest: /etc/rsyslog.conf
-      line: '{{ item.value }}'
-      state: present
-      insertafter: yes
-  with_items:
-    - { value: '*.* @@loghost.example.com' }
-  when:
-      - rhel8cis_rule_4_2_1_5|bool
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_4.2.1.5
-      - notimplemented
+#- name: "SCORED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
+#  lineinfile:
+#      dest: /etc/rsyslog.conf
+#      line: '{{ item }}'
+#      state: present
+#      insertafter: yes
+#  loop: "{{ rhel8cis_rsyslog_destination }}"
+#  when:
+#      - rhel8cis_rule_4_2_1_5|bool
+#  tags:
+#      - level1
+#      - level2
+#      - patch
+#      - rule_4.2.1.5
+#      - notimplemented
 
 - name: "SCORED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
   command: systemctl restart rsyslog

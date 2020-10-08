@@ -419,6 +419,8 @@ rhel8cis_pass:
 # Syslog system
 rhel8cis_syslog: rsyslog
 #rhel8cis_syslog: syslog-ng
+rhel8cis_rsyslog_destination:
+    - localhost
 
 rhel8cis_vartmp:
     source: /tmp
