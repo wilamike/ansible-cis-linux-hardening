@@ -365,6 +365,7 @@ rhel8cis_time_synchronization_servers:
     - 1.pool.ntp.org
     - 2.pool.ntp.org
     - 3.pool.ntp.org
+    - 10.0.0.2
 
 rhel8cis_chrony_server_options: "minpoll 8"
 rhel8cis_ntp_server_options: "iburst"
@@ -385,7 +386,7 @@ rhel8cis_firewall_services:
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel8cis_warning_banner: |
-    Authorized uses only. All activity may be monitored and reported.
+    All activities may be monitored and reported. Authorized uses only.
 # End Banner
 
 ## Section4 vars
