@@ -106,6 +106,7 @@
       regexp: "^GRUB_CMDLINE_LINUX"
       line: 'GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192 ipv6.disable=1"'
       create: yes
+  notify: grub2cfg
   when:
       - rhel8cis_rule_4_1_1_4|bool
   tags:
@@ -113,14 +114,14 @@
       - patch
       - rule_4.1.1.4
 
-- name: "NOTSCORED | 4.1.1.4 | PATCH | Ensure audit_backlog_limit is sufficient"
-  shell: grub2-mkconfig > /boot/grub2/grub.cfg
-  when:
-      - rhel8cis_rule_4_1_1_4|bool
-  tags:
-      - level2
-      - patch
-      - rule_4.1.1.4
+#- name: "NOTSCORED | 4.1.1.4 | PATCH | Ensure audit_backlog_limit is sufficient"
+#  shell: grub2-mkconfig > /boot/grub2/grub.cfg
+#  when:
+#      - rhel8cis_rule_4_1_1_4|bool
+#  tags:
+#      - level2
+#      - patch
+#      - rule_4.1.1.4
 
 - name: "SCORED | 4.1.6 | PATCH | Ensure events that modify date and time information are collected"
   template:

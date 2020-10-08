@@ -602,13 +602,14 @@
   lineinfile:
     path: /etc/grub.d/40_custom
     line: "password"
+  notify: grub2cfg
   tags:
     - workaround
 
-- name: "SCORED | 1.4.2.3 | WORKAROUND | Workaround for bootloader password set"
-  shell: grub2-mkconfig > /boot/grub2/grub.cfg
-  tags:
-    - workaround
+#- name:: "SCORED | 1.4.2.3 | WORKAROUND | Workaround for bootloader password set"
+#  shell: grub2-mkconfig > /boot/grub2/grub.cfg
+#  tags:
+#    - workaround
 
 - name: "SCORED | 1.5.1 | PATCH | Ensure permissions on bootloader config are configured"
   stat:

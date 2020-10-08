@@ -504,6 +504,28 @@
       enabled: yes
   when: rhel8cis_firewall == "iptables"
 
+- name: "SCORED | 3.4.4.1 | Copy ip6table rules"
+  copy:
+      src: etc/sysconfig/ip6tables
+      dest: /etc/sysconfig/ip6tables
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel8cis_firewall == "iptables"
+
+- name: "SCORED | 3.4.4.1 | Load ip6table rules"
+  shell: ip6tables-restore /etc/sysconfig/ip6tables
+  when:
+      - rhel8cis_firewall == "iptables"
+
+- name: "SCORED | 3.4.4.1 | PATCH | Ensure ip6tables service is enabled and running"
+  service:
+      name: ip6tables
+      state: started
+      enabled: yes
+  when: rhel8cis_firewall == "iptables"
+
 #- name: "SCORED | 3.4.4.1.1 | PATCH | Ensure default deny firewall policy"
 #  shell: |
 #    iptables -P INPUT DROP
@@ -586,6 +608,7 @@
       regexp: "^GRUB_CMDLINE_LINUX"
       line: 'GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192 ipv6.disable=1"'
       create: yes
+  notify: grub2cfg
   when:
       - rhel8cis_rule_3_6|bool
   tags:
@@ -593,14 +616,14 @@
       - patch
       - rule_3.6
 
-- name: "NOTSCORED | 3.6 | PATCH | Disable IPv6"
-  shell: grub2-mkconfig > /boot/grub2/grub.cfg
-  when:
-      - rhel8cis_rule_3_6|bool
-  tags:
-      - level2
-      - patch
-      - rule_3.6
+#- name: "NOTSCORED | 3.6 | PATCH | Disable IPv6"
+#  shell: grub2-mkconfig > /boot/grub2/grub.cfg
+#  when:
+#      - rhel8cis_rule_3_6|bool
+#  tags:
+#      - level2
+#      - patch
+#      - rule_3.6
 
 - name: "SCORED | 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured"
   template:

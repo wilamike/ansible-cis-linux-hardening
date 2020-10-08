@@ -74,6 +74,26 @@
   tags:
       - skip_ansible_lint
 
-- name: grub2cfg
-  command: /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+- name: grub2cfg to /boot/grub2/grub.cfg
+  shell: |
+    /sbin/grub2-mkconfig -o {{ item }}
+    chown root:root {{ item }}
+    chmod u-wx {{ item }}
+    chmod og-rwx {{ item }}
+    chmod og-rwx /boot/grub2/grubenv
+  vars:
+    item: /boot/grub2/grub.cfg
   ignore_errors: True
+  listen: grub2cfg
+
+- name: grub2cfg to /boot/efi/EFI/redhat/grub.cfg
+  shell: |
+    /sbin/grub2-mkconfig -o {{ item }}
+    chown root:root {{ item }}
+    chmod og-rwx {{ item }}
+  vars:
+    item: /boot/efi/EFI/redhat/grub.cfg
+  when: lookup('file', item, errors='ignore')
+  ignore_errors: True
+  listen: grub2cfg
+
