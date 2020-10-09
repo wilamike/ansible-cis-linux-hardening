@@ -76,6 +76,26 @@ Below is the respective output from Redhat 7 and onward.
      ×  Mount /home options is expected to include "nodev"
 ```
 
+* The playbook directly generates GRUB password to user.cfg. Meanwhile inspec detects the syntax in config file grub.conf and hence the related test will fail. Below errors are expected.
+
+```
+  ×  cis-dil-benchmark-1.4.2: Ensure bootloader password is set (14 failed)
+     ×  File /boot/grub/grub.conf content is expected to match /^set superusers/
+     ×  File /boot/grub/grub.conf content is expected to match /^password/
+     ×  File /boot/grub/grub.cfg content is expected to match /^set superusers/
+     ×  File /boot/grub/grub.cfg content is expected to match /^password/
+     ×  File /boot/grub/menu.lst content is expected to match /^set superusers/
+     ×  File /boot/grub/menu.lst content is expected to match /^password/
+     ×  File /boot/boot/grub/grub.conf content is expected to match /^set superusers/
+     ×  File /boot/boot/grub/grub.conf content is expected to match /^password/
+     ×  File /boot/boot/grub/grub.cfg content is expected to match /^set superusers/
+     ×  File /boot/boot/grub/grub.cfg content is expected to match /^password/
+     ×  File /boot/boot/grub/menu.lst content is expected to match /^set superusers/
+     ×  File /boot/boot/grub/menu.lst content is expected to match /^password/
+     ×  File /boot/grub2/grub.cfg content is expected to match /^set superusers/
+     ×  File /boot/grub2/grub.cfg content is expected to match /^password/
+```
+
 * The below files are set with file permission 0000 instead of 0600 in order to pass Tenable scan test. Below errors are expected.
 
 ```
@@ -110,5 +130,4 @@ Below is the respective output from Redhat 7 and onward.
 ---
 ## Workaround
 
-* An empty GRUB password is added by this Ansible roles to pass the respective cis-dil test. It won't reduce the security of Cloud VM as the boot menu is not accessible.
 
