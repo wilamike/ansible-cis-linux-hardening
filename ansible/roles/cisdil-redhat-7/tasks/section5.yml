@@ -612,7 +612,7 @@
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   user:
       name: "{{ item }}"
-      shell: /sbin/nologin
+      shell: "{{ lookup('pipe', 'which nologin') }}"
   with_items:
       - "{{ system_account.stdout_lines }}"
   when:
@@ -750,4 +750,15 @@
   with_items:
     - "/etc/pam.d/password-auth"
     - "/etc/pam.d/system-auth"
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user shell timeout is 900 seconds or less"
+  lineinfile:
+      state: present
+      dest: /etc/{{ item }}
+      regexp: '^[\s]+TMOUT.*$|^readonly[\s]+TMOUT.*$'
+      line: 'TMOUT=900; readonly TMOUT; export TMOUT'
+  ignore_errors: yes
+  loop:
+      - bashrc
+      - profile
 

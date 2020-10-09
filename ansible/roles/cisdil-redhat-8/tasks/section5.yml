@@ -675,13 +675,13 @@
   lineinfile:
       state: present
       dest: /etc/{{ item }}
-      regexp: '^readonly'
-      line: 'readonly TMOUT=900 2>/dev/null; export TMOUT'
+      regexp: '^[\s]+TMOUT.*$|^readonly[\s]+TMOUT.*$'
+      line: 'TMOUT=900; readonly TMOUT; export TMOUT'
   ignore_errors: yes
   with_items:
       - bashrc
       - profile
-      - profile.d/*.sh
+#      - profile.d/*.sh
   when:
       - rhel8cis_rule_5_5_3|bool
   tags:
