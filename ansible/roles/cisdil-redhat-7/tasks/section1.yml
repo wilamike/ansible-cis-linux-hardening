@@ -231,7 +231,34 @@
 #      - patch
 #      - rule_1.1.1.8
 #      - vfat
-#
+
+- name: "SCORED | 1.1.1.9 | PATCH | Ensure mounting of usb-storage is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install usb-storage(\\s|$)"
+      line: "install usb-storage /bin/true"
+      create: yes
+  when:
+      - rhel7cis_rule_1_1_1_9|bool
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.9
+
+- name: "SCORED | 1.1.1.9 | PATCH | Remove usb-storage module"
+  modprobe:
+      name: usb-storage
+      state: absent
+  when:
+      - rhel7cis_rule_1_1_1_9|bool
+      - ansible_connection != 'docker'
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.1.1.9
+
 - name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
   systemd:
       name: tmp.mount
