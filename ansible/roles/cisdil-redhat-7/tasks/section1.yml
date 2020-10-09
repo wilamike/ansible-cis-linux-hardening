@@ -710,7 +710,7 @@
       - rhel7cis_set_boot_pass|bool
 #      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
       - rhel7cis_bootloader_password_hash is defined
-      - lookup('file', '/boot/efi/EFI/redhat/grub.cfg', errors='ignore')
+      - lookup('pipe', 'sudo test -e /boot/efi/EFI/redhat/grub.cfg && echo true || echo false') | bool
       - rhel7cis_rule_1_4_2|bool
   tags:
       - level1
