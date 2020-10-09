@@ -630,6 +630,7 @@
       owner: root
       group: root
       mode: 0600
+  ingore_errors: yes
   when:
       - grub_cfg.stat.exists and grub_cfg.stat.islnk
       - rhel8cis_rule_1_5_1|bool
