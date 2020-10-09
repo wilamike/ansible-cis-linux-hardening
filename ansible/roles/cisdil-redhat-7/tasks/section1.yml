@@ -1041,10 +1041,17 @@
   tags:
     - workaround
 
-- name: "SCORED | 1.3.2 | Workaround | Ensure SELinux is set to enforcing mode"
+- name: "SCORED | 1.3.2 | Workaround | Ensure sudo commands use pty"
   lineinfile:
     path: /etc/sudoers
     line: Defaults use_pty
+  tags:
+    - workaround
+
+- name: "SCORED | 1.3.3 | Workaround | Ensure sudo log file exists"
+  lineinfile:
+    path: /etc/sudoers
+    line: 'Defaults logfile="/var/log/sudo.log"'
   tags:
     - workaround
 
