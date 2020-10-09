@@ -670,12 +670,29 @@
       - patch
       - rule_1.4.1
 
+#- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
+#  grub_crypt:
+#      password: "{{ rhel7cis_bootloader_password }}"
+#  register: grub_pass
+#  when:
+#      - rhel7cis_set_boot_pass|bool
+#      - rhel7cis_rule_1_4_2|bool
+#  tags:
+#      - level1
+#      - scored
+#      - grub
+#      - patch
+#      - rule_1.4.2
+
 - name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
-  grub_crypt:
-      password: "{{ rhel7cis_bootloader_password }}"
-  register: grub_pass
+  copy:
+      dest: /boot/grub2/user.cfg
+      content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
+  notify: grub2cfg
   when:
       - rhel7cis_set_boot_pass|bool
+#      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
+      - rhel7cis_bootloader_password_hash is defined
       - rhel7cis_rule_1_4_2|bool
   tags:
       - level1
@@ -686,12 +703,14 @@
 
 - name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
   copy:
-      dest: /boot/grub2/user.cfg
-      content: "GRUB2_PASSWORD={{ grub_pass.passhash }}"
-  notify: generate new grub config
+      dest: /boot/efi/EFI/redhat/user.cfg
+      content: "GRUB2_PASSWORD={{ rhel7cis_bootloader_password_hash }}"
+  notify: grub2cfg
   when:
       - rhel7cis_set_boot_pass|bool
-      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
+#      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
+      - rhel7cis_bootloader_password_hash is defined
+      - lookup('file', '/boot/efi/EFI/redhat/grub.cfg', errors='ignore')
       - rhel7cis_rule_1_4_2|bool
   tags:
       - level1
@@ -1020,26 +1039,26 @@
       - rule_1.8
       - skip_ansible_lint
 
-# A very hacky workaround to add two meaningless lines into grub config to pass cis-dil-benchmark-1.4.2
-# Should be removed to avoid side impact during reboot
-- name: "SCORED | 1.4.2.1 | WORKAROUND | Workaround for bootloader password set"
-  lineinfile:
-    path: /etc/grub.d/40_custom
-    line: "set superusers"
-  tags:
-    - workaround
-
-- name: "SCORED | 1.4.2.2 | WORKAROUND | Workaround for bootloader password set"
-  lineinfile:
-    path: /etc/grub.d/40_custom
-    line: "password"
-  tags:
-    - workaround
-
-- name: "SCORED | 1.4.2.3 | WORKAROUND | Workaround for bootloader password set"
-  shell: grub2-mkconfig > /boot/grub2/grub.cfg
-  tags:
-    - workaround
+## A very hacky workaround to add two meaningless lines into grub config to pass cis-dil-benchmark-1.4.2
+## Should be removed to avoid side impact during reboot
+#- name: "SCORED | 1.4.2.1 | WORKAROUND | Workaround for bootloader password set"
+#  lineinfile:
+#    path: /etc/grub.d/40_custom
+#    line: "set superusers"
+#  tags:
+#    - workaround
+#
+#- name: "SCORED | 1.4.2.2 | WORKAROUND | Workaround for bootloader password set"
+#  lineinfile:
+#    path: /etc/grub.d/40_custom
+#    line: "password"
+#  tags:
+#    - workaround
+#
+#- name: "SCORED | 1.4.2.3 | WORKAROUND | Workaround for bootloader password set"
+#  shell: grub2-mkconfig > /boot/grub2/grub.cfg
+#  tags:
+#    - workaround
 
 - name: "SCORED | 1.3.2 | Workaround | Ensure sudo commands use pty"
   lineinfile:
