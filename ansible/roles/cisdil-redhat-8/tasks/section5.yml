@@ -644,7 +644,7 @@
 - name: "SCORED | 5.5.2 | PATCH | Ensure system accounts are secured"
   user:
       name: "{{ item }}"
-      shell: /sbin/nologin
+      shell: "{{ lookup('pipe', 'which nologin') }}"
   with_items:
       - "{{ system_account.stdout_lines }}"
   when:
