@@ -76,24 +76,27 @@
 
 - name: grub2cfg to /boot/grub2/grub.cfg
   shell: |
-    /sbin/grub2-mkconfig -o {{ item }}
-    chown root:root {{ item }}
-    chmod u-wx {{ item }}
-    chmod og-rwx {{ item }}
-    chmod og-rwx /boot/grub2/grubenv
-  vars:
-    item: /boot/grub2/grub.cfg
+    test -f /boot/grub2/grub.cfg && /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+    test -f /boot/grub2/grub.cfg && chown root:root /boot/grub2/grub.cfg
+    test -f /boot/grub2/grub.cfg && chmod u-x /boot/grub2/grub.cfg
+    test -f /boot/grub2/grub.cfg && chmod og-rwx /boot/grub2/grub.cfg
+    test -f /boot/grub2/grubenv && chown root:root /boot/grub2/grubenv
+    test -f /boot/grub2/grubenv && chmod u-x /boot/grub2/grubenv
+    test -f /boot/grub2/grubenv && chmod og-rwx /boot/grub2/grubenv
+    test -f /boot/grub2/user.cfg && chown root:root /boot/grub2/user.cfg
+    test -f /boot/grub2/user.cfg && chmod u-x /boot/grub2/user.cfg
+    test -f /boot/grub2/user.cfg && chmod og-rwx /boot/grub2/user.cfg
   ignore_errors: True
   listen: grub2cfg
 
 - name: grub2cfg to /boot/efi/EFI/redhat/grub.cfg
   shell: |
-    /sbin/grub2-mkconfig -o {{ item }}
-    chown root:root {{ item }}
-    chmod og-rwx {{ item }}
-  vars:
-    item: /boot/efi/EFI/redhat/grub.cfg
-  when: lookup('file', item, errors='ignore')
+    test -f /boot/efi/EFI/redhat/grub.cfg && /sbin/grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+    test -f /boot/efi/EFI/redhat/grub.cfg && chown root:root /boot/efi/EFI/redhat/grub.cfg
+    test -f /boot/efi/EFI/redhat/grub.cfg && chmod og-rwx /boot/efi/EFI/redhat/grub.cfg
+    test -f /boot/efi/EFI/redhat/user.cfg && chown root:root /boot/efi/EFI/redhat/user.cfg
+    test -f /boot/efi/EFI/redhat/user.cfg && chmod u-x /boot/efi/EFI/redhat/user.cfg
+    test -f /boot/efi/EFI/redhat/user.cfg && chmod og-rwx /boot/efi/EFI/redhat/user.cfg
   ignore_errors: True
   listen: grub2cfg
 
