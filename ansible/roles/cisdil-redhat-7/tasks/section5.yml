@@ -456,6 +456,22 @@
       - patch
       - rule_5.2.16
 
+- name: "SCORED | 5.2.21 | PATCH | Ensure SSH MaxStartups is configured"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '(?i)^MaxStartups'
+      line: "MaxStartups {{ rhel7cis_sshd['maxstartups'] }}"
+      validate: /usr/sbin/sshd -t -f %s
+  when:
+      - rhel7cis_rule_5_2_14|bool
+  notify: restart sshd
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_5.2.21
+
 - name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
   lineinfile:
       state: present

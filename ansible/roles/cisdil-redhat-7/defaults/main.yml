@@ -387,6 +387,7 @@ rhel7cis_sshd:
     #allowgroups: systems dba
     denyusers: root
     denygroups: root
+    maxstartups: "10:30:60"
 
 rhel7cis_pass:
     max_days: 30
