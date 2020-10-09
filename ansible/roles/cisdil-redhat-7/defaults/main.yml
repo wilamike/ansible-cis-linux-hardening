@@ -333,6 +333,7 @@ rhel7cis_time_synchronization_servers:
     - 1.pool.ntp.org
     - 2.pool.ntp.org
     - 3.pool.ntp.org
+    - 10.0.0.2
 
 rhel7cis_chrony_server_options: "minpoll 8"
 rhel7cis_ntp_server_options: "iburst"
@@ -371,6 +372,7 @@ rhel7cis_sudolog: /var/log/sudo.log
 # 4.2.1.4 Ensure ryslsog is configured to send logs to a remote log host
 rhel7cis_rsyslog_destination:
    - localhost
+   - 10.0.0.2
 
 ## Section5 vars
 

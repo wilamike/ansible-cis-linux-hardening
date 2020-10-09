@@ -403,6 +403,20 @@
       - patch
       - rule_3.6
 
+- name: "SCORED | 3.5.3.1.3 | WORKAROUND | Ensure firewalld is not installed or stopped and masked"
+  service:
+      name: firewalld
+      state: stopped
+      enabled: no
+  ignore_errors: yes
+  when: rhel7cis_firewall == "iptables"
+
+- name: "SCORED | 3.5.3.1.3 | WORKAROUND | Ensure firewalld is not installed or stopped and masked"
+  shell: systemctl --now mask firewalld
+  ignore_errors: yes
+  when:
+      - rhel7cis_firewall == "iptables"
+
 - name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
   yum:
       name: iptables-services

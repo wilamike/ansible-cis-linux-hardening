@@ -626,6 +626,15 @@
       - patch
       - rule_2.2.17
 
+- name: "SCORED | 2.2.17 | PATCH | Ensure rsync is not installed or the rsyncd service is masked"
+  shell: systemctl --now mask rsyncd
+  when:
+      - rhel7cis_rule_2_2_17|bool
+  tags:
+      - level1
+      - patch
+      - rule_2.2.17
+
 - name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled"
   service:
       name: telnet
