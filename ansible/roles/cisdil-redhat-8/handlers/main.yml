@@ -97,3 +97,6 @@
   ignore_errors: True
   listen: grub2cfg
 
+- name: authselect apply-changes
+  command: "authselect apply-changes"
+

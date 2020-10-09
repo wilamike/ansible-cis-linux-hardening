@@ -750,66 +750,106 @@
 - name: "CIS_DIL | C.5.3.1 | Ensure password reuse is limited"
   block:
 
-    - name: "Remove password retry setting if defined in /etc/authselect/custom/custom-profile/system-auth"
+    - name: "Remove password retry setting"
       lineinfile:
-        path: "/etc/authselect/custom/custom-profile/system-auth"
+        path: "{{ item }}"
         regexp: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
         state: absent
+      loop:
+        - /etc/authselect/custom/custom-profile/system-auth
+        - /etc/authselect/custom/custom-profile/password-auth
 
-    - name: "Remove password retry setting if defined in /etc/authselect/custom/custom-profile/password-auth"
+    - name: "Add password retry"
       lineinfile:
-        path: "/etc/authselect/custom/custom-profile/password-auth"
-        regexp: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
-        state: absent
-
-    - name: "Add password retry in /etc/authselect/custom/custom-profile/system-auth"
-      lineinfile:
-        path: "/etc/authselect/custom/custom-profile/system-auth"
+        path: "{{ item }}"
         insertbefore: '^password(\s+)requisite(\s+)(.*)$'
         line: "password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3"
         state: present
-
-    - name: "Add password retry in /etc/authselect/custom/custom-profile/password-auth"
-      lineinfile:
-        path: "/etc/authselect/custom/custom-profile/password-auth"
-        insertbefore: '^password(\s+)requisite(\s+)(.*)$'
-        line: "password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3"
-        state: present
-
-    - name: "Apply changes"
-      command: "authselect apply-changes"
+      loop:
+        - /etc/authselect/custom/custom-profile/system-auth
+        - /etc/authselect/custom/custom-profile/password-auth
+      notify: authselect apply-changes
 
 - name: "CIS_DIL | C.5.3.3 | Ensure password reuse is limited"
   block:
 
-    - name: "Remove password history setting if defined in /etc/authselect/custom/custom-profile/system-auth"
+    - name: "Remove password history setting if defined"
       lineinfile:
-        path: "/etc/authselect/custom/custom-profile/system-auth"
+        path: "{{ item }}"
         regexp: '^password(\s+)requisite(\s+)pam_pwhistory.so(.*)$'
         state: absent
+      loop:
+        - /etc/authselect/custom/custom-profile/system-auth
+        - /etc/authselect/custom/custom-profile/password-auth
 
-    - name: "Remove password history setting if defined in /etc/authselect/custom/custom-profile/password-auth"
+    - name: "Keep history of used passwords"
       lineinfile:
-        path: "/etc/authselect/custom/custom-profile/password-auth"
-        regexp: '^password(\s+)requisite(\s+)pam_pwhistory.so(.*)$'
-        state: absent
-
-    - name: "Keep history of used passwords in /etc/authselect/custom/custom-profile/system-auth"
-      lineinfile:
-        path: "/etc/authselect/custom/custom-profile/system-auth"
+        path: "{{ item }}"
         insertafter: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
         line: "password   requisite      pam_pwhistory.so remember=5 use_authtok"
         state: present
+      loop:
+        - /etc/authselect/custom/custom-profile/system-auth
+        - /etc/authselect/custom/custom-profile/password-auth
+      notify: authselect apply-changes
 
-    - name: "Keep history of used passwords in /etc/authselect/custom/custom-profile/password-auth"
-      lineinfile:
-        path: "/etc/authselect/custom/custom-profile/password-auth"
-        insertafter: '^password(\s+)requisite(\s+)pam_pwquality.so(.*)$'
-        line: "password   requisite      pam_pwhistory.so remember=5 use_authtok"
-        state: present
+- name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts"
+  lineinfile:
+    path: "{{ item }}"
+    insertafter: '^auth(\s+)sufficient(\s+)pam_unix.so(.*)$'
+    regexp: '^auth(\s+)sufficient(\s+)pam_faillock.so(.*)$'
+    line: 'auth       sufficient                                    pam_faillock.so authsucc audit deny=5 unlock_time=900'
+    state: present
+  with_items:
+    - /etc/authselect/custom/custom-profile/password-auth
+    - /etc/authselect/custom/custom-profile/system-auth
+  notify: authselect apply-changes
 
-    - name: "Apply changes"
-      command: "authselect apply-changes"
+- name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts"
+  lineinfile:
+    path: "{{ item }}"
+    insertafter: '^auth(\s+)sufficient(\s+)pam_unix.so(.*)$'
+    regexp: '^auth(\s+)\[success=1 default=bad\](.*)$'
+    line: 'auth    [success=1 default=bad]   pam_unix.so'
+    state: present
+  with_items:
+    - /etc/authselect/custom/custom-profile/password-auth
+    - /etc/authselect/custom/custom-profile/system-auth
+  notify: authselect apply-changes
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts"
+  lineinfile:
+    path: "{{ item }}"
+    insertafter: '^auth(\s+)sufficient(\s+)pam_unix.so(.*)$'
+    regexp: '^auth(\s+)\[default=die\](.*)$'
+    line: 'auth    [default=die]   pam_faillock.so authfail audit deny=5 unlock_time=900'
+    state: present
+  with_items:
+    - /etc/authselect/custom/custom-profile/password-auth
+    - /etc/authselect/custom/custom-profile/system-auth
+  notify: authselect apply-changes
+
+- name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts"
+  lineinfile:
+    path: "{{ item }}"
+    regexp: '^auth(\s+)required(\s+)pam_faillock.so(\s+)preauth(\s+)(.*)$'
+    line: 'auth        required                                     pam_faillock.so preauth audit silent deny=5 unlock_time=900'
+    state: present
+  with_items:
+    - /etc/authselect/custom/custom-profile/password-auth
+    - /etc/authselect/custom/custom-profile/system-auth
+  notify: authselect apply-changes
+
+- name: "SCORED | 5.4.3 | PATCH | Ensure password reuse is limited"
+  lineinfile:
+    path: "{{ item }}"
+    regexp: '^password(\s+)sufficient(\s+)pam_unix.so(.*)$'
+    line: 'password    sufficient                                   pam_unix.so sha512 shadow  try_first_pass use_authtok remember=3'
+    state: present
+  with_items:
+    - /etc/authselect/custom/custom-profile/password-auth
+    - /etc/authselect/custom/custom-profile/system-auth
+  notify: authselect apply-changes
 
 - name: "CIS-DIL | C.5.4.1.4 | Ensure inactive password lock is 30 days or less"
   replace:
