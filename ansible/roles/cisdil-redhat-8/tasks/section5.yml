@@ -675,8 +675,8 @@
   lineinfile:
       state: present
       dest: /etc/{{ item }}
-      regexp: '^[\s]+TMOUT.*$|^readonly[\s]+TMOUT.*$'
-      line: 'TMOUT=900; readonly TMOUT; export TMOUT'
+      regexp: '^[\s]*TMOUT.*$|^[\s]*readonly[\s]+TMOUT.*$'
+      line: 'readonly TMOUT=900 2>/dev/null; export TMOUT'
   ignore_errors: yes
   with_items:
       - bashrc
