@@ -663,6 +663,8 @@
   when:
       - rhel8cis_set_boot_pass|bool
 #      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
+      - rhel8cis_bootloader_password_hash is defined
+      - lookup('pipe', 'sudo test -e /boot/grub2/grub.cfg && echo true || echo false') | bool
       - rhel8cis_rule_1_5_2|bool
   tags:
       - level1
@@ -675,6 +677,7 @@
   copy:
       dest: /boot/efi/EFI/redhat/user.cfg
       content: "GRUB2_PASSWORD={{ rhel8cis_bootloader_password_hash }}"
+      remote_src: yes
   notify: grub2cfg
   when:
       - rhel8cis_set_boot_pass|bool
