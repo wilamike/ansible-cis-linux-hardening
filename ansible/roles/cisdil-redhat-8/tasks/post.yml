@@ -9,20 +9,20 @@
       - skip_ansible_lint
 
 # Force mount -av for /var/tmp
-- name: "SCORED | 1.1.7 | WORKAROUND | Force execution of /var/tmp mount"
-  command: /usr/bin/umount /var/tmp
-  ignore_errors: yes
-  register: temp
-  tags:
-    - workaround
+# - name: "SCORED | 1.1.7 | WORKAROUND | Force execution of /var/tmp mount"
+#   command: /usr/bin/umount /var/tmp
+#   ignore_errors: yes
+#   register: temp
+#   tags:
+#     - workaround
 
-- debug: var=temp
+# - debug: var=temp
 
-- name: "SCORED | 1.1.7 | WORKAROUND | Force execution of /var/tmp mount"
-  command: /usr/bin/mount -av
-  register: temp
-  tags:
-    - workaround
+# - name: "SCORED | 1.1.7 | WORKAROUND | Force execution of /var/tmp mount"
+#   command: /usr/bin/mount -av
+#   register: temp
+#   tags:
+#     - workaround
 
-- debug: var=temp
+# - debug: var=temp
 
