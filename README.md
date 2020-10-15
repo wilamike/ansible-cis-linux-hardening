@@ -15,12 +15,16 @@ The project is tested with inspec with below profile:
 
 ### To run on AWS EC2 or GCE instance locally (Apply for RHEL7 and RHEL8):
 
+* Tune parameters in below two files for RHEL7 and RHEL8 respectively to meet your requirements.
+```
+ansible/roles/cisdil-redhat-7/defaults/main.yml
+ansible/roles/cisdil-redhat-8/defaults/main.yml
+```
 
 * Install CIS DIL galaxy role
 ```
 ansible-galaxy install dev-sec.os-hardening dev-sec.ssh-hardening
 ```
-
 
 * Run baseline hardening
 ```
