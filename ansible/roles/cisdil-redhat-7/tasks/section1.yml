@@ -316,7 +316,7 @@
   mount:
       name: /tmp
       src: "{{ rhel7cis_tmp['source'] }}"
-      state: present
+      state: mounted
       fstype: "{{ rhel7cis_tmp['fstype'] }}"
       opts: "{{ rhel7cis_tmp['opts'] }}"
   when:
@@ -368,7 +368,7 @@
   mount:
       name: /var/tmp
       src: "{{ rhel7cis_vartmp['source'] }}"
-      state: present
+      state: mounted
       fstype: "{{ rhel7cis_vartmp['fstype'] }}"
       opts: "{{ rhel7cis_vartmp['opts'] }}"
   when:
