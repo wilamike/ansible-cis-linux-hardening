@@ -131,6 +131,12 @@ Below is the respective output from Redhat 7 and onward.
     × File /etc/gshadow- is expected to be writable by owner
 ```
 
+* The minimum days between password changes is changed to 3 in order to pass Tenable scan test. Below errors are expected.
+
+```
+  ×  cis-dil-benchmark-5.4.1.2: Ensure minimum days between password changes is 7 or more
+     ×  login.defs PASS_MIN_DAYS is expected to cmp >= 7
+```
 ---
 ## Workaround
 
