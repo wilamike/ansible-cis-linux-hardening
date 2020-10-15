@@ -424,14 +424,14 @@ rhel8cis_rsyslog_destination:
     - localhost
 
 rhel8cis_vartmp:
-    source: /tmp
-    fstype: none
+    source: tmpfs
+    fstype: tmpfs
     opts: "defaults,nodev,nosuid,noexec,bind"
     enabled: yes
 
 rhel8cis_tmp:
-    source: /tmp
-    fstype: none
+    source: tmpfs
+    fstype: tmpfs
     opts: "defaults,nodev,nosuid,bind"
     enabled: yes
 
