@@ -140,13 +140,49 @@
 #      - rule_1.1.1.2
 #      - vfat
 
-- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
-  systemd:
-      name: tmp.mount
-      daemon_reload: yes
-      enabled: yes
-      masked: no
-      state: started
+# - name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
+#   systemd:
+#       name: tmp.mount
+#       daemon_reload: yes
+#       enabled: yes
+#       masked: no
+#       state: started
+#   when:
+#       - rhel8cis_rule_1_1_2|bool
+#   tags:
+#       - level2
+#       - scored
+#       - patch
+#       - rule_1.1.2
+
+# - name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
+#          SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
+#          SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n
+#          | drop custom tmp.mount"
+#   copy:
+#       src: etc/systemd/system/tmp.mount
+#       dest: /etc/systemd/system/tmp.mount
+#       owner: root
+#       group: root
+#       mode: 0644
+#   notify: systemd restart tmp.mount
+#   when:
+#       - rhel8cis_rule_1_1_3|bool
+#       - rhel8cis_rule_1_1_4|bool
+#       - rhel8cis_rule_1_1_5|bool
+#   tags:
+#       - level1
+#       - scored
+#       - patch
+#       - rule_1.1.3
+#       - rule_1.1.4
+#       - rule_1.1.5
+
+- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp"
+  shell: mount | grep "on /tmp "
+  register: tmp_mounted
+  changed_when: no
+  failed_when: no
   when:
       - rhel8cis_rule_1_1_2|bool
   tags:
@@ -157,16 +193,15 @@
 
 - name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
          SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
-         SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n
-         | drop custom tmp.mount"
-  copy:
-      src: etc/systemd/system/tmp.mount
-      dest: /etc/systemd/system/tmp.mount
-      owner: root
-      group: root
-      mode: 0644
-  notify: systemd restart tmp.mount
+         SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n"
+  mount:
+      name: /tmp
+      src: "{{ rhel8cis_tmp['source'] }}"
+      state: present
+      fstype: "{{ rhel8cis_tmp['fstype'] }}"
+      opts: "{{ rhel8cis_tmp['opts'] }}"
   when:
+      - rhel8cis_tmp['enabled']
       - rhel8cis_rule_1_1_3|bool
       - rhel8cis_rule_1_1_4|bool
       - rhel8cis_rule_1_1_5|bool

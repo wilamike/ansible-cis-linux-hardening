@@ -429,4 +429,10 @@ rhel8cis_vartmp:
     opts: "defaults,nodev,nosuid,noexec,bind"
     enabled: yes
 
+rhel8cis_tmp:
+    source: /tmp
+    fstype: none
+    opts: "defaults,nodev,nosuid,bind"
+    enabled: yes
+
 rhel8cis_rule_5_4_2_min_uid: 1000
