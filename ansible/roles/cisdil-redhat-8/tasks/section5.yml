@@ -840,6 +840,16 @@
     - /etc/authselect/custom/custom-profile/system-auth
   notify: authselect apply-changes
 
+- name: "SCORED | 5.4.2 | PATCH | Ensure lockout for failed password attempts"
+  lineinfile:
+    path: "{{ item }}"
+    regexp: '^auth(\s+)required(\s+)pam_faillock.so(\s+)authfail(\s+)(.*)$'
+    state: absent
+  with_items:
+    - /etc/authselect/custom/custom-profile/password-auth
+    - /etc/authselect/custom/custom-profile/system-auth
+  notify: authselect apply-changes
+
 - name: "SCORED | 5.4.3 | PATCH | Ensure password reuse is limited"
   lineinfile:
     path: "{{ item }}"
