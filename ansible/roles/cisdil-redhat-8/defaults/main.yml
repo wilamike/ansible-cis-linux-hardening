@@ -422,6 +422,8 @@ rhel8cis_syslog: rsyslog
 #rhel8cis_syslog: syslog-ng
 rhel8cis_rsyslog_destination:
     - localhost
+    - 10.0.0.2
+    - 127.0.0.1
 
 rhel8cis_vartmp:
     source: tmpfs
