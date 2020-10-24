@@ -732,7 +732,7 @@
         lineinfile:
             dest: /usr/lib/systemd/system/emergency.service
             regexp: '^ExecStart=.*systemd-sulogin.*'
-            line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+            line: 'ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
         when:
             - rhel8cis_rule_1_5_3|bool
         tags:
@@ -744,7 +744,7 @@
         lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
             regexp: '^ExecStart=.*systemd-sulogin.*'
-            line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
+            line: 'ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
         when:
             - rhel8cis_rule_1_5_3|bool
         tags:
