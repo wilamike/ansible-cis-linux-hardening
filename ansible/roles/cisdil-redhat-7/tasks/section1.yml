@@ -1109,3 +1109,18 @@
   tags:
     - workaround
 
+- name: "SCORED | 1.5.1 | WORKAROUND | Set default file permission in bootloader mount for /boot/efi"
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^(.*)/boot/efi(.*)umask=(\d+)(.*)$'
+    line: '\1/boot/efi\2umask=177\4'
+    backrefs: yes
+  register: bootefi_fstab_update_result
+
+# Ansible mount module fails to mount using fstab content. Apparently a bug. Use shell command instead.
+- name: "SCORED | 1.5.1 | WORKAROUND | Set default file permission in bootloader mount for /boot/efi"
+  shell: |
+    umount /boot/efi
+    mount -av
+  when: bootefi_fstab_update_result.changed
+  ignore_errors: yes
