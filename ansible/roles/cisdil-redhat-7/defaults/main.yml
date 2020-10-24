@@ -356,7 +356,7 @@ rhel7cis_firewall_services:
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
-    All activities may be monitored and reported. Authorized uses only.
+    All activities performed on this server may be monitored and reported. Authorized uses only.
 # End Banner
 
 ## Section4 vars
