@@ -155,53 +155,18 @@
 #       - patch
 #       - rule_1.1.2
 
-# - name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
-#          SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
-#          SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n
-#          | drop custom tmp.mount"
-#   copy:
-#       src: etc/systemd/system/tmp.mount
-#       dest: /etc/systemd/system/tmp.mount
-#       owner: root
-#       group: root
-#       mode: 0644
-#   notify: systemd restart tmp.mount
-#   when:
-#       - rhel8cis_rule_1_1_3|bool
-#       - rhel8cis_rule_1_1_4|bool
-#       - rhel8cis_rule_1_1_5|bool
-#   tags:
-#       - level1
-#       - scored
-#       - patch
-#       - rule_1.1.3
-#       - rule_1.1.4
-#       - rule_1.1.5
-
-- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp"
-  shell: mount | grep "on /tmp "
-  register: tmp_mounted
-  changed_when: no
-  failed_when: no
-  when:
-      - rhel8cis_rule_1_1_2|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.1.2
-
 - name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
          SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
-         SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n"
-  mount:
-      name: /tmp
-      src: "{{ rhel8cis_tmp['source'] }}"
-      state: mounted
-      fstype: "{{ rhel8cis_tmp['fstype'] }}"
-      opts: "{{ rhel8cis_tmp['opts'] }}"
+         SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n
+         | drop custom tmp.mount"
+  copy:
+      src: etc/systemd/system/tmp.mount
+      dest: /etc/systemd/system/tmp.mount
+      owner: root
+      group: root
+      mode: 0644
+  notify: systemd restart tmp.mount
   when:
-      - rhel8cis_tmp['enabled']
       - rhel8cis_rule_1_1_3|bool
       - rhel8cis_rule_1_1_4|bool
       - rhel8cis_rule_1_1_5|bool
@@ -212,6 +177,41 @@
       - rule_1.1.3
       - rule_1.1.4
       - rule_1.1.5
+
+#- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp"
+#  shell: mount | grep "on /tmp "
+#  register: tmp_mounted
+#  changed_when: no
+#  failed_when: no
+#  when:
+#      - rhel8cis_rule_1_1_2|bool
+#  tags:
+#      - level2
+#      - scored
+#      - patch
+#      - rule_1.1.2
+#
+#- name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
+#         SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
+#         SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition\n"
+#  mount:
+#      name: /tmp
+#      src: "{{ rhel8cis_tmp['source'] }}"
+#      state: mounted
+#      fstype: "{{ rhel8cis_tmp['fstype'] }}"
+#      opts: "{{ rhel8cis_tmp['opts'] }}"
+#  when:
+#      - rhel8cis_tmp['enabled']
+#      - rhel8cis_rule_1_1_3|bool
+#      - rhel8cis_rule_1_1_4|bool
+#      - rhel8cis_rule_1_1_5|bool
+#  tags:
+#      - level1
+#      - scored
+#      - patch
+#      - rule_1.1.3
+#      - rule_1.1.4
+#      - rule_1.1.5
 
 - name: "SCORED | 1.1.6 | PATCH | Ensure separate partition exists for /var"
   shell: mount | grep "on /var "
@@ -1013,3 +1013,19 @@
       - patch
       - rule_1.11
       - crypto
+
+- name: "SCORED | 1.5.1 | WORKAROUND | Set default file permission in bootloader mount for /boot/efi"
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^(.*)/boot/efi(.*)umask=(\d+)(.*)$'
+    line: '\1/boot/efi\2umask=177\4'
+    backrefs: yes
+  register: bootefi_fstab_update_result
+
+# Ansible mount module fails to mount using fstab content. Apparently a bug. Use shell command instead.
+- name: "SCORED | 1.5.1 | WORKAROUND | Set default file permission in bootloader mount for /boot/efi"
+  shell: |
+    umount /boot/efi
+    mount -av
+  when: bootefi_fstab_update_result.changed
+  ignore_errors: yes
