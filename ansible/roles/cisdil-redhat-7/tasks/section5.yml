@@ -612,7 +612,7 @@
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   user:
       name: "{{ item }}"
-      shell: "{{ lookup('pipe', 'which nologin') }}"
+      shell: "{{ nologin_path }}"
   with_items:
       - "{{ system_account.stdout_lines }}"
   when:
@@ -735,6 +735,17 @@
     insertafter: '^auth(\s+)sufficient(\s+)pam_unix.so(.*)$'
     regexp: '^auth(\s+)\[default=die\](.*)$'
     line: 'auth    [default=die]   pam_faillock.so authfail audit deny=5 unlock_time=900'
+    state: present
+  with_items:
+    - "/etc/pam.d/password-auth"
+    - "/etc/pam.d/system-auth"
+
+- name: "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts"
+  lineinfile:
+    path: "{{ item }}"
+    insertbefore: '^account(\s+)required(\s+)pam_unix.so(.*)$'
+    regexp: 'account(\s+)required(\s+)pam_failock.so(.*)'
+    line: 'account     required      pam_faillock.so'
     state: present
   with_items:
     - "/etc/pam.d/password-auth"

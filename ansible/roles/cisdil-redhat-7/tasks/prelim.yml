@@ -286,3 +286,12 @@
   check_mode: no
   tags:
       - skip_ansible_lint #  ANSIBLE0006
+
+- name: "PRELIM | Check for path of nologin"
+  shell: "which nologin"
+  register: nologin_result
+  become: no
+
+- name: "PRELIM | Set nologin path as fact"
+  set_fact:
+    nologin_path: "{{ nologin_result.stdout }}"
