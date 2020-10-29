@@ -291,7 +291,14 @@
   shell: "which nologin"
   register: nologin_result
   become: no
+  ignore_errors: yes
 
 - name: "PRELIM | Set nologin path as fact"
   set_fact:
     nologin_path: "{{ nologin_result.stdout }}"
+  when: nologin_result is succeeded
+
+- name: "PRELIM | Set nologin path as fact"
+  set_fact:
+    nologin_path: "/usr/sbin/nologin"
+  when: nologin_result is failed
