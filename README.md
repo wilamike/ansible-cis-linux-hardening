@@ -1,5 +1,5 @@
-# ansible-redhat-hardening
-Ansible roles to harden Redhat 7 and 8 on AWS or GCP according to CIS framework. This is developed based on:
+# ansible-cis-linux-hardening
+Ansible roles to harden Redhat 7/8 and Ubuntu 18/20 on AWS or GCP according to CIS framework. This is developed based on:
 
 * Redhat 8 - https://github.com/jwacross/RHEL8-CIS
 * Redhat 7 - https://github.com/ansible-lockdown/RHEL7-CIS
