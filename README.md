@@ -3,6 +3,7 @@ Ansible roles to harden Redhat 7/8 and Ubuntu 18/20 on AWS or GCP according to C
 
 * Redhat 8 - https://github.com/jwacross/RHEL8-CIS
 * Redhat 7 - https://github.com/ansible-lockdown/RHEL7-CIS
+* Ubuntu 18.04 - https://github.com/florianutz/Ubuntu1804-CIS
 
 The project is tested with inspec with below profile:
 
@@ -13,17 +14,19 @@ The project is tested with inspec with below profile:
 
 ## HOWTO
 
-### To run on AWS EC2 or GCE instance locally (Apply for RHEL7 and RHEL8):
+### To run on AWS EC2 or GCE instance locally:
 
-* Tune parameters in below two files for RHEL7 and RHEL8 respectively to meet your requirements.
+* Tune parameters in below two files for your OS respectively to meet your requirements.
 ```
 ansible/roles/cisdil-redhat-7/defaults/main.yml
 ansible/roles/cisdil-redhat-8/defaults/main.yml
+ansible/roles/cisdil-debian-18/defaults/main.yml
+ansible/roles/cisdil-debian-20/defaults/main.yml
 ```
 
-* Install CIS DIL galaxy role
+* Install galaxy roles
 ```
-ansible-galaxy install dev-sec.os-hardening dev-sec.ssh-hardening
+ansible-galaxy install -r ansible/requirements.yml
 ```
 
 * Run baseline hardening
@@ -31,7 +34,7 @@ ansible-galaxy install dev-sec.os-hardening dev-sec.ssh-hardening
 ansible-playbook ansible/server_baseline_hardening.yml
 ```
 
-* Run cis-dil hardening
+* Run cis hardening
 ```
 ansible-playbook ansible/server_cisdil_hardening.yml
 ```

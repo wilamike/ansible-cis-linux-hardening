@@ -1,0 +1,9 @@
+---
+roles:
+  - name: dev-sec.os-hardening
+  - name: dev-sec.ssh-hardening
+
+collections:
+  - name: ansible.posix
+  - name: community.general
+
