@@ -1,29 +1,3 @@
-Ubuntu 18.04 CIS STIG
-================
-
-[![Build Status](https://travis-ci.com/florianutz/Ubuntu1804-CIS.svg?branch=master)](https://travis-ci.com/florianutz/Ubuntu1804-CIS)
-[![Ansible Role](https://img.shields.io/badge/role-florianutz.Ubuntu1804--CIS-blue.svg)](https://galaxy.ansible.com/florianutz/Ubuntu1804-CIS/)
-
-Configure Ubuntu 18.04 machine to be CIS compliant. Level 1 and 2 findings will be corrected by default.
-
-This role **will make changes to the system** that could break things. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
-
-## IMPORTANT INSTALL STEP
-
-If you want to install this via the `ansible-galaxy` command you'll need to run it like this:
-
-`ansible-galaxy install -p roles -r requirements.yml`
-
-With this in the file requirements.yml:
-
-```
-- src: https://github.com/florianutz/Ubuntu1804-CIS.git
-```
-
-Based on [CIS Ubuntu Benchmark v2.0.1 - 01-03-2020 ](https://www.cisecurity.org/cis-benchmarks/).
-
-This repo originated from work done by [MindPointGroup](https://github.com/MindPointGroup/RHEL7-CIS)
-
 Requirements
 ------------
 
