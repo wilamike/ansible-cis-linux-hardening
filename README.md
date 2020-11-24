@@ -41,6 +41,13 @@ ansible-playbook ansible/server_cisdil_hardening.yml
 
 * Reboot
 
+### To customize parameters
+
+* Edit the default settings in below files
+```
+ansible/roles/cisdil-<OS type>-<OS release>/defaults/main.yml
+```
+
 ---
 
 ## Known issues
