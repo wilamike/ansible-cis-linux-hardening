@@ -320,7 +320,7 @@
   firewalld:
       service: "{{ item }}"
       state: enabled
-      zone: drop
+      zone: dmz
       permanent: true
       immediate: true
   notify: restart firewalld
@@ -335,7 +335,7 @@
       - rule_3.4.4.1.4
 
 - name: "SCORED | 3.4.2.4 | PATCH | Ensure default zone is set"
-  command: firewall-cmd --set-default-zone=trusted
+  command: firewall-cmd --set-default-zone=drop
   changed_when: no
   when:
       - rhel8cis_rule_3_4_2_4|bool
@@ -345,7 +345,7 @@
       - rule_3.4.2.4
 
 - name: "SCORED | 3.4.2.5 | PATCH | Ensure network interfaces are assigned to appropriate zone"
-  command: firewall-cmd --zone=trusted --change-interface=eth0
+  command: firewall-cmd --zone=dmz --change-interface=eth0
   changed_when: no
   when:
       - rhel8cis_rule_3_4_2_5|bool
@@ -354,16 +354,16 @@
       - patch
       - rule_3.4.2.5
 
-- name: "SCORED | 3.4.2.6 | PATCH | Ensure unnecessary services and ports are not accepted"
-  shell: |
-    - firewall-cmd --remove-service=cockpit
-    - firewall-cmd --remove-port=25/tcp
-  when:
-      - rhel8cis_rule_3_4_2_6|bool
-  tags:
-      - level1
-      - patch
-      - rule_3.4.2.6
+#- name: "SCORED | 3.4.2.6 | PATCH | Ensure unnecessary services and ports are not accepted"
+#  shell: |
+#    - firewall-cmd --remove-service=cockpit
+#    - firewall-cmd --remove-port=25/tcp
+#  when:
+#      - rhel8cis_rule_3_4_2_6|bool
+#  tags:
+#      - level1
+#      - patch
+#      - rule_3.4.2.6
 
 #- name: "SCORED | 3.4.3.1 | PATCH | Ensure iptables are flushed"
 #  shell: |
