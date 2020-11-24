@@ -338,6 +338,7 @@
   command: firewall-cmd --set-default-zone=drop
   changed_when: no
   when:
+      - rhel8cis_firewall == "firewalld"
       - rhel8cis_rule_3_4_2_4|bool
   tags:
       - level1
@@ -348,6 +349,7 @@
   command: firewall-cmd --zone=dmz --change-interface=eth0 --permanent
   changed_when: no
   when:
+      - rhel8cis_firewall == "firewalld"
       - rhel8cis_rule_3_4_2_5|bool
   tags:
       - level1

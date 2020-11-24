@@ -442,6 +442,23 @@
       - patch
       - rule_3.6.1
 
+- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
+  firewalld:
+      service: "{{ item }}"
+      state: enabled
+      zone: dmz
+      permanent: true
+      immediate: true
+  notify: restart firewalld
+  with_items: "{{ rhel7cis_firewall_services }}"
+  when:
+      - rhel7cis_firewall == "firewalld"
+      - rhel7cis_rule_3_6_5|bool
+      - ansible_connection != 'docker'
+  tags:
+      - level1
+      - patch
+
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   lineinfile:
       dest: /etc/firewalld/firewalld.conf
@@ -460,10 +477,22 @@
       state: enabled
       zone: drop
       permanent: true
+  notify: restart firewalld
   when:
       - rhel7cis_firewall == "firewalld"
       - rhel7cis_rule_3_6_2|bool
       - ansible_connection != 'docker'
+  tags:
+      - level1
+      - patch
+      - rule_3.6.2
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure network interfaces are assigned to appropriate zone"
+  command: firewall-cmd --zone=dmz --change-interface=eth0 --permanent
+  changed_when: no
+  when:
+      - rhel7cis_rule_3_6_2|bool
+      - rhel7cis_firewall == "firewalld"
   tags:
       - level1
       - patch
@@ -520,22 +549,6 @@
 #      - rule_3.6.4
 #      - notimplemented
 
-- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
-  firewalld:
-      service: "{{ item }}"
-      state: enabled
-      zone: drop
-      permanent: true
-      immediate: true
-  notify: restart firewalld
-  with_items: "{{ rhel7cis_firewall_services }}"
-  when:
-      - rhel7cis_firewall == "firewalld"
-      - rhel7cis_rule_3_6_5|bool
-      - ansible_connection != 'docker'
-  tags:
-      - level1
-      - patch
       - rule_3.6.5
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
