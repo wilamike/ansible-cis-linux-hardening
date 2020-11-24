@@ -378,8 +378,8 @@ rhel8cis_host_allow:
     - "172.16.0.0/255.240.0.0"
     - "192.168.0.0/255.255.0.0"
 
-#rhel8cis_firewall: firewalld
-rhel8cis_firewall: iptables
+rhel8cis_firewall: firewalld
+#rhel8cis_firewall: iptables
 
 rhel8cis_firewall_services:
     - ssh
