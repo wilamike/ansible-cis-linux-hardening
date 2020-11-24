@@ -345,7 +345,7 @@
       - rule_3.4.2.4
 
 - name: "SCORED | 3.4.2.5 | PATCH | Ensure network interfaces are assigned to appropriate zone"
-  command: firewall-cmd --zone=dmz --change-interface=eth0
+  command: firewall-cmd --zone=dmz --change-interface=eth0 --permanent
   changed_when: no
   when:
       - rhel8cis_rule_3_4_2_5|bool
