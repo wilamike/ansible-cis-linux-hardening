@@ -609,7 +609,7 @@
       dest: /etc/default/grub
       regexp: '^(GRUB_CMDLINE_LINUX=.*(?!.*ipv6\.disable=1)\"[^\"]+)(\".*)'
       line: '\1 ipv6.disable=1\2'
-      create: yes
+      backrefs: yes
   notify: grub2cfg
   when:
       - rhel8cis_rule_3_6|bool
