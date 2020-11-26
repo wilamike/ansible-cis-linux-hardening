@@ -338,7 +338,7 @@
   lineinfile:
       dest: /etc/firewalld/firewalld.conf
       regexp: "^DefaultZone"
-      line: "DefaultZone=drop"
+      line: "DefaultZone=dmz"
   when:
       - rhel8cis_firewall == "firewalld"
       - rhel8cis_rule_3_4_2_4|bool
@@ -350,7 +350,7 @@
 - name: "SCORED | 3.4.2.4 | PATCH | Ensure default zone is set"
   firewalld:
       state: enabled
-      zone: drop
+      zone: dmz
       permanent: true
   notify: restart firewalld
   when:
@@ -361,16 +361,33 @@
       - patch
       - rule_3.4.2.4  
 
-- name: "SCORED | 3.4.2.5 | PATCH | Ensure network interfaces are assigned to appropriate zone"
-  command: firewall-cmd --zone=dmz --change-interface=eth0 --permanent
-  changed_when: no
+- name: "SCORED | 3.4.2.4 | PATCH | Ensure default zone is set"
+  firewalld:
+      state: enabled
+      zone: dmz
+      interface: eth0
+      permanent: true
+      immediate: true
+  notify: restart firewalld
   when:
       - rhel8cis_firewall == "firewalld"
-      - rhel8cis_rule_3_4_2_5|bool
+      - rhel8cis_rule_3_4_2_4|bool
   tags:
       - level1
       - patch
-      - rule_3.4.2.5
+      - rule_3.4.2.4 
+
+
+#- name: "SCORED | 3.4.2.5 | PATCH | Ensure network interfaces are assigned to appropriate zone"
+#  command: firewall-cmd --zone=dmz --change-interface=eth0 --permanent
+#  changed_when: no
+#  when:
+#      - rhel8cis_firewall == "firewalld"
+#      - rhel8cis_rule_3_4_2_5|bool
+#  tags:
+#      - level1
+#      - patch
+#      - rule_3.4.2.5
 
 #- name: "SCORED | 3.4.2.6 | PATCH | Ensure unnecessary services and ports are not accepted"
 #  shell: |
