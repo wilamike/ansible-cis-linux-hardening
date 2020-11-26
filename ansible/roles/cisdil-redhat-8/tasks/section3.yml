@@ -335,7 +335,7 @@
       - rule_3.4.4.1.4
 
 - name: "SCORED | 3.4.2.4 | PATCH | Ensure default zone is set"
-  command: firewall-cmd --set-default-zone=drop
+  command: firewall-cmd --set-default-zone=dmz
   changed_when: no
   when:
       - rhel8cis_firewall == "firewalld"
