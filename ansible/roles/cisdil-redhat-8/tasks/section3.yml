@@ -335,8 +335,10 @@
       - rule_3.4.4.1.4
 
 - name: "SCORED | 3.4.2.4 | PATCH | Ensure default zone is set"
-  command: firewall-cmd --set-default-zone=dmz
-  changed_when: no
+  lineinfile:
+      dest: /etc/firewalld/firewalld.conf
+      regexp: "^DefaultZone"
+      line: "DefaultZone=drop"
   when:
       - rhel8cis_firewall == "firewalld"
       - rhel8cis_rule_3_4_2_4|bool
@@ -344,6 +346,20 @@
       - level1
       - patch
       - rule_3.4.2.4
+
+- name: "SCORED | 3.4.2.4 | PATCH | Ensure default zone is set"
+  firewalld:
+      state: enabled
+      zone: drop
+      permanent: true
+  notify: restart firewalld
+  when:
+      - rhel8cis_firewall == "firewalld"
+      - rhel8cis_rule_3_4_2_4|bool
+  tags:
+      - level1
+      - patch
+      - rule_3.4.2.4  
 
 - name: "SCORED | 3.4.2.5 | PATCH | Ensure network interfaces are assigned to appropriate zone"
   command: firewall-cmd --zone=dmz --change-interface=eth0 --permanent
