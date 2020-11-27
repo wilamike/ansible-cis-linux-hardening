@@ -452,11 +452,20 @@ ubuntu1804cis_shell_timeout: 900
 ubuntu1804cis_syslog: rsyslog
 # ubuntu1804cis_syslog: syslog-ng
 
+ubuntu1804cis_tmp:
+  source: tmpfs
+  fstype: tmpfs
+  opts: "defaults,nodev,nosuid,noexec"
+  enabled: true
+
 ubuntu1804cis_vartmp:
-  source: /tmp
-  fstype: false
-  opts: "defaults, nodev, nosuid, noexec, bind"
-  enabled: false
+  source: tmpfs
+  fstype: tmpfs
+  opts: "defaults,nodev,nosuid,noexec"
+  enabled: true
+
+ubuntu1804cis_devshm:
+  opts: "defaults,nodev,nosuid,noexec"
 
 # Apply upgrades (set to false if another patching system is in place)
 ubuntu1804cis_apply_upgrades: true
@@ -489,9 +498,9 @@ bashrc_file:
 tmp_mount_file:
   RedHat: /usr/lib/systemd/system/tmp.mount
   Debian: /usr/share/systemd/tmp.mount
-tmp_mount_options:
-  RedHat: mode=1777,strictatime,noexec,nodev,nosuid
-  Debian: mode=1777,strictatime,nodev,nosuid
+#tmp_mount_options:
+#  RedHat: mode=1777,strictatime,noexec,nodev,nosuid
+#  Debian: mode=1777,strictatime,nodev,nosuid
 chrony_config_file:
   RedHat: /etc/chrony.conf
   Debian: /etc/chrony/chrony.conf
