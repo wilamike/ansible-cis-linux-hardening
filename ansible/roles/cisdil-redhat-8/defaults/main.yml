@@ -437,4 +437,7 @@ rhel8cis_tmp:
     opts: "defaults,nodev,nosuid,noexec"
     enabled: yes
 
+rhel8cis_devshm:
+    opts: "defaults,nodev,nosuid,noexec"
+
 rhel8cis_rule_5_4_2_min_uid: 1000

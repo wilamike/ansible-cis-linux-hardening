@@ -332,7 +332,7 @@
       src: tmpfs
       state: mounted
       fstype: tmpfs
-      opts: "defaults,nodev,nosuid,noexec"
+      opts: "{{ rhel8cis_devshm['opts'] }}"
   when:
       - rhel8cis_rule_1_1_15|bool
       - rhel8cis_rule_1_1_16|bool
