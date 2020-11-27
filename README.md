@@ -52,6 +52,8 @@ ansible/roles/cisdil-<OS type>-<OS release>/defaults/main.yml
 
 ## Known issues
 
+You may find below errors when using [Chef Inspec](https://doc.chef.io/inspec/) to verify the setup. 
+
 * The daemon tcpd/tcp_wrapper is depreciated on Redhat and CentOS 8. Hence the respective cis-dil test fails with below message:
 ```
   ×  cis-dil-benchmark-3.4.1: Ensure TCP Wrappers is installed (2 failed)
