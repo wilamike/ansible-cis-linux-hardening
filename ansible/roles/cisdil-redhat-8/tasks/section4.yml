@@ -103,9 +103,9 @@
 - name: "NOTSCORED | 4.1.1.4 | PATCH | Ensure audit_backlog_limit is sufficient"
   lineinfile:
       dest: /etc/default/grub
-      regexp: "^GRUB_CMDLINE_LINUX"
-      line: 'GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192 ipv6.disable=1"'
-      create: yes
+      regexp: '^(GRUB_CMDLINE_LINUX=.*(?!.*audit=1)\"[^\"]+)(\".*)'
+      line: '\1 audit=1\2'
+      backrefs: yes
   notify: grub2cfg
   when:
       - rhel8cis_rule_4_1_1_4|bool
