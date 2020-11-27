@@ -288,7 +288,7 @@ rhel7cis_rhnsd_required: false
 # 1.4.2 Bootloader password
 #rhel7cis_bootloader_password: 
 rhel7cis_bootloader_password_hash: "$6$4M.OrDkIHojJm3Gc$76gyACxQ8NJSmWgTg4UI4AEtpnDRhWPYKNnHB7TTJFDT45iCGvn1fbUrDfy0m8xKSaserJ2lit8BtFMomfmnw1"
-rhel7cis_set_boot_pass: true
+rhel7cis_set_boot_pass: false
 
 # System network parameters (host only OR host and router)
 rhel7cis_is_router: false
@@ -324,6 +324,7 @@ rhel7cis_talk_required: false
 rhel7cis_rsh_required: false
 rhel7cis_ypbind_required: false
 
+# Section 3 variables
 # Time Synchronization
 rhel7cis_time_synchronization: chrony
 #rhel7cis_time_synchronization: ntp
@@ -353,6 +354,7 @@ rhel7cis_firewall: firewalld
 rhel7cis_firewall_services:
     - ssh
     - dhcpv6-client
+rhel7cis_firewall_defaultzone: dmz
 
 # Warning Banner Content (issue, issue.net, motd)
 rhel7cis_warning_banner: |
@@ -416,6 +418,9 @@ rhel7cis_tmp:
     fstype: tmpfs
     opts: "defaults,nodev,nosuid,noexec"
     enabled: yes
+
+rhel7cis_devshm:
+    opts: "defaults,nodev,nosuid,noexec"
 
 rhel7cis_rule_5_4_2_min_uid: 1000
 

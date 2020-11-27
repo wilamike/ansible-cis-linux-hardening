@@ -446,7 +446,7 @@
   firewalld:
       service: "{{ item }}"
       state: enabled
-      zone: dmz
+      zone: "{{ rhel7cis_firewall_defaultzone }}"
       permanent: true
       immediate: true
   notify: restart firewalld
@@ -463,7 +463,7 @@
   lineinfile:
       dest: /etc/firewalld/firewalld.conf
       regexp: "^DefaultZone"
-      line: "DefaultZone=drop"
+      line: "DefaultZone={{ rhel7cis_firewall_defaultzone }}"
   when:
       - rhel7cis_firewall == "firewalld"
       - rhel7cis_rule_3_6_2|bool
@@ -475,7 +475,7 @@
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   firewalld:
       state: enabled
-      zone: drop
+      zone: "{{ rhel7cis_firewall_defaultzone }}"
       permanent: true
   notify: restart firewalld
   when:
