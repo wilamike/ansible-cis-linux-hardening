@@ -754,11 +754,12 @@
       - rule_1.5.1
 
 - name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set - generate password"
-  shell: "set -o pipefail;
+  shell: |
+        set -o pipefail;
         if [ '{{ ubuntu1804cis_bootloader_password }}' == 'random' ];
         then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c12); else PASSWORD='{{ ubuntu1804cis_bootloader_password }}';
         fi;
-        echo -e \"$PASSWORD\n$PASSWORD\" | grub-mkpasswd-pbkdf2 | awk '/grub.pbkdf/{print$NF}'"
+        echo -e \"$PASSWORD\n$PASSWORD\" | grub-mkpasswd-pbkdf2 | awk '/grub.pbkdf/{print$NF}'
   register: grub_pass
   args:
       executable: /bin/bash
@@ -809,11 +810,12 @@
       - rule_1.5.2
 
 - name: "SCORED | 1.5.3 | PATCH | Ensure authentication required for single user mode"
-  shell: "set -o pipefail;
+  shell: |
+          set -o pipefail;
           if [ '{{ ubuntu1804cis_root_password }}' == 'random' ];
           then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c24); else PASSWORD='{{ ubuntu1804cis_root_password }}';
           fi;
-          echo \"root:$PASSWORD\" | chpasswd"
+          echo \"root:$PASSWORD\" | chpasswd
   args:
       executable: /bin/bash
   when:
@@ -932,6 +934,38 @@
     state: present
     create: true
     insertbefore: "# End of file"
+  notify: restart systemd-coredump
+  when:
+      - ubuntu1804cis_rule_1_6_4
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.6.4
+
+- name: "SCORED | 1.6.4 | PATCH | Ensure core dumps are restricted - processsizemax"
+  lineinfile:
+    dest: /etc/systemd/coredump.conf
+    line: 'ProcessSizeMax=0'
+    regexp: '^[#\s]*ProcessSizeMax=.*'
+    state: present
+    create: true
+  notify: restart systemd-coredump
+  when:
+      - ubuntu1804cis_rule_1_6_4
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_1.6.4
+
+- name: "SCORED | 1.6.4 | PATCH | Ensure core dumps are restricted - storage"
+  lineinfile:
+    dest: /etc/systemd/coredump.conf
+    line: 'Storage=none'
+    regexp: '^[#\s]*Storage=.*'
+    state: present
+    create: true
   notify: restart systemd-coredump
   when:
       - ubuntu1804cis_rule_1_6_4
