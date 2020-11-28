@@ -325,8 +325,13 @@ ubuntu1804cis_xinetd_required: false
 ubuntu1804cis_rhnsd_required: false
 
 # 1.4.2 Bootloader password
-ubuntu1804cis_bootloader_password: random
-ubuntu1804cis_set_boot_pass: false
+# Generate encrypted password by
+#    grub-mkpasswd-pbkdf2
+#    Enter passowrd: <password>
+#    Reenter password: <password>
+# And paste the encrypted password into variable ubuntu1804cis_bootloader_password
+ubuntu1804cis_bootloader_password: "grub.pbkdf2.sha512.10000.7C983D7BAA2ED8370E324DB8C63EFB55A52691B8D8BA3518C516D5444CD7BCAB63ACE58910815CC705EDF2CC87C754738CBC8EF9B30CDB3F7DFDAA96928F9340.BD5DB8A7DC55E3EDA9799EDE57DBAC66BC21BA9047B3B2CA7B3CC8DD61CE68F325159DE9E0FA5C12006BE5E033EAC4116273CEEC557D2C0BC56FAE30247D89FF"
+ubuntu1804cis_set_boot_pass: true
 
 # System network parameters (host only OR host and router)
 ubuntu1804cis_is_router: false
