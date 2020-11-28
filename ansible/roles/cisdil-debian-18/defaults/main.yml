@@ -334,10 +334,6 @@ ubuntu1804cis_is_router: false
 # IPv6 required
 ubuntu1804cis_ipv6_required: false
 
-# Bootloader password
-ubuntu1804cis_bootloader_password_hash: "$6$4M.OrDkIHojJm3Gc$76gyACxQ8NJSmWgTg4UI4AEtpnDRhWPYKNnHB7TTJFDT45iCGvn1fbUrDfy0m8xKSaserJ2lit8BtFMomfmnw1"
-ubuntu1804cis_set_boot_pass: false
-
 # AIDE
 ubuntu1804cis_config_aide: true
 # AIDE cron settings
