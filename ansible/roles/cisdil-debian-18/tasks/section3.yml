@@ -278,7 +278,7 @@
 
 - name: "NOTSCORED | 3.3.1 | PATCH | Ensure TCP Wrappers is installed"
   apt:
-      name: "{{ tcp_wrapper_package[ansible_os_family] }}"
+      name: tcpd
       state: present
       install_recommends: false
   when:

@@ -334,6 +334,10 @@ ubuntu1804cis_is_router: false
 # IPv6 required
 ubuntu1804cis_ipv6_required: false
 
+# Bootloader password
+ubuntu1804cis_bootloader_password_hash: "$6$4M.OrDkIHojJm3Gc$76gyACxQ8NJSmWgTg4UI4AEtpnDRhWPYKNnHB7TTJFDT45iCGvn1fbUrDfy0m8xKSaserJ2lit8BtFMomfmnw1"
+ubuntu1804cis_set_boot_pass: false
+
 # AIDE
 ubuntu1804cis_config_aide: true
 # AIDE cron settings
@@ -374,7 +378,7 @@ ubuntu1804cis_time_synchronization_servers:
     config: "minpoll 8"
 
 # 3.3 TCP Wrappers
-ubuntu1804cis_setup_tcp_wrappers: false
+ubuntu1804cis_setup_tcp_wrappers: true
 
 # 3.3.4 | PATCH | Ensure /etc/hosts.allow is configured
 ubuntu1804cis_host_allow:
@@ -489,9 +493,9 @@ ntp_service:
 chrony_service:
   RedHat: chronyd
   Debian: chrony
-tcp_wrapper_package:
-  RedHat: tcp_wrappers
-  Debian: tcpd
+#tcp_wrapper_package:
+#  RedHat: tcp_wrappers
+#  Debian: tcpd
 bashrc_file:
   RedHat: /etc/bashrc
   Debian: /etc/bash.bashrc
