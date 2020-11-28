@@ -985,7 +985,7 @@
   lineinfile:
       dest: /etc/firewalld/firewalld.conf
       regexp: "^DefaultZone"
-      line: "DefaultZone=drop"
+      line: "DefaultZone={{ ubuntu1804cis_firewall_default_zone }}"
   when:
       - ubuntu1804cis_rule_3_5_4_3_3
       - ubuntu1804cis_firewall == "firewalld"
@@ -1015,7 +1015,7 @@
   firewalld:
       service: "{{ item }}"
       state: enabled
-      zone: drop
+      zone: "{{ ubuntu1804cis_firewall_default_zone }}"
       permanent: true
       immediate: true
   when:
