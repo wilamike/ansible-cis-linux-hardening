@@ -250,7 +250,7 @@ ubuntu1804cis_rule_5_4_3: true
 ubuntu1804cis_rule_5_4_4: true
 ubuntu1804cis_rule_5_4_5: true
 ubuntu1804cis_rule_5_5: true
-ubuntu1804cis_rule_5_6: false
+ubuntu1804cis_rule_5_6: true
 
 # Section 6 rules
 ubuntu1804cis_rule_6_1_1: true
@@ -425,7 +425,7 @@ ubuntu1804cis_sshd:
   # allowusers:
   # allowgroups: systems dba
   # denyusers:
-  # denygroups:
+  denygroups: cdrom
 
 ubuntu1804cis_pwquality:
   - key: 'minlen'
@@ -441,7 +441,7 @@ ubuntu1804cis_pwquality:
 
 ubuntu1804cis_pass:
   max_days: 365
-  min_days: 1
+  min_days: 7
   warn_age: 7
   inactive: 30
   history: 5
