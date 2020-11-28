@@ -463,8 +463,9 @@
       src: etc/rsyslog.d/10-cis-hardening.conf
       dest: /etc/rsyslog.d/10-cis-hardening.conf
       owner: root
-      owner: root
+      group: root
       mode: '0644'
+  notify: restart rsyslog
   when:
       - ubuntu1804cis_rule_4_2_1_3
   tags:
@@ -490,8 +491,10 @@
       - rule_4.2.1.4
 
 - name: "SCORED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
-  command: /bin/true
-  changed_when: false
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    line: "*.*    @@{{ item }}"
+  loop: "{{ ubuntu1804cis_rsyslog_destination }}"
   when:
       - ubuntu1804cis_rule_4_2_1_5
   tags:

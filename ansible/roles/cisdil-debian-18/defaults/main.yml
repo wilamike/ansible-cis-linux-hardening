@@ -453,6 +453,10 @@ ubuntu1804cis_shell_timeout: 900
 ubuntu1804cis_syslog: rsyslog
 # ubuntu1804cis_syslog: syslog-ng
 
+ubuntu1804cis_rsyslog_destination:
+  - localhost
+  - 192.168.0.1
+
 ubuntu1804cis_tmp:
   source: tmpfs
   fstype: tmpfs
