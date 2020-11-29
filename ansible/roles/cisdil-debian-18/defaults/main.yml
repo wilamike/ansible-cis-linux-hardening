@@ -429,9 +429,8 @@ ubuntu1804cis_sshd:
   ### Make sure you understand the precedence when working with these values!!
   # allowusers:
   # allowgroups: systems dba
-  allowgroups: ubuntu
-  # denyusers:
-  # denygroups:
+  denyusers: root
+  denygroups: root
 
 ubuntu1804cis_pwquality:
   - key: 'minlen'
