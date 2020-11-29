@@ -693,12 +693,11 @@
 - name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set"
   copy:
       dest: /boot/grub2/user.cfg
-      content: "GRUB2_PASSWORD={{ rhel8cis_bootloader_password_hash }}"
+      content: "GRUB2_PASSWORD={{ rhel8cis_bootloader_password }}"
   notify: grub2cfg
   when:
       - rhel8cis_set_boot_pass|bool
-#      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash != ''
-      - rhel8cis_bootloader_password_hash is defined
+      - rhel8cis_bootloader_password | length > 0
       - rhel8cis_rule_1_5_2|bool
   tags:
       - level1
@@ -710,14 +709,50 @@
 - name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set"
   copy:
       dest: /boot/efi/EFI/redhat/user.cfg
-      content: "GRUB2_PASSWORD={{ rhel8cis_bootloader_password_hash }}"
+      content: "GRUB2_PASSWORD={{ rhel8cis_bootloader_password }}"
       remote_src: yes
   notify: grub2cfg
   when:
       - rhel8cis_set_boot_pass|bool
-#      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
-      - rhel8cis_bootloader_password_hash is defined
+      - rhel8cis_bootloader_password | length > 0
       - lookup('pipe', 'sudo test -e /boot/efi/EFI/redhat/grub.cfg && echo true || echo false') | bool
+      - rhel8cis_rule_1_4_2|bool
+  tags:
+      - level1
+      - scored
+      - grub
+      - patch
+      - rule_1.5.2
+
+- name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set"
+  copy:
+      dest: /boot/efi/EFI/centos/user.cfg
+      content: "GRUB2_PASSWORD={{ rhel8cis_bootloader_password }}"
+      remote_src: yes
+  notify: grub2cfg
+  when:
+      - rhel8cis_set_boot_pass|bool
+      - rhel8cis_bootloader_password | length > 0
+      - lookup('pipe', 'sudo test -e /boot/efi/EFI/centos/grub.cfg && echo true || echo false') | bool
+      - rhel8cis_rule_1_4_2|bool
+  tags:
+      - level1
+      - scored
+      - grub
+      - patch
+      - rule_1.5.2
+
+- name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set"
+  lineinfile:
+      dest: /etc/grub.d/10_linux
+      regexp: '^(CLASS=.*(?!.*--unrestricted)\"[^\"]+)(\".*)'
+      line: '\1 --unrestricted\2'
+      backrefs: yes
+  notify: grub2cfg
+  when:
+      - rhel8cis_set_boot_pass|bool
+      - rhel8cis_bootloader_password | length > 0
+      - lookup('pipe', 'sudo test -e /boot/efi/EFI/centos/grub.cfg && echo true || echo false') | bool
       - rhel8cis_rule_1_4_2|bool
   tags:
       - level1

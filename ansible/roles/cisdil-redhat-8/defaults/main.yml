@@ -318,10 +318,14 @@ rhel8cis_xinetd_required: false
 # RedHat Satellite Subscription items
 rhel8cis_rhnsd_required: false
 
-# 1.4.2 Bootloader password
-#rhel8cis_bootloader_password:
-rhel8cis_set_boot_pass: false
-rhel8cis_bootloader_password_hash: "$6$4M.OrDkIHojJm3Gc$76gyACxQ8NJSmWgTg4UI4AEtpnDRhWPYKNnHB7TTJFDT45iCGvn1fbUrDfy0m8xKSaserJ2lit8BtFMomfmnw1"
+# 1.5.2 Bootloader password
+# Generate encrypted password by
+#    grub2-mkpasswd-pbkdf2
+#    Enter passowrd: <password>
+#    Reenter password: <password>
+# And paste the encrypted password into variable rhel8cis_bootloader_password
+rhel8cis_set_boot_pass: true
+rhel8cis_bootloader_password: "grub.pbkdf2.sha512.10000.48B234FC8811953B75BE0906EF804586A76C608A029AA8FED4DCAED53048341476CCEDAF4EC1B757CF25289FDFBF6225A7C988FBF11B776450616C64ED2914E9.5DCEFFBCF8CF2374E3487A21DE87B662598D3B87321ACC84119637F0E37EED5634E495C62CBA081AB5A07984610EF47BAAD017655AF624C15E91512111095B37"
 
 # System network parameters (host only OR host and router)
 rhel8cis_is_router: false

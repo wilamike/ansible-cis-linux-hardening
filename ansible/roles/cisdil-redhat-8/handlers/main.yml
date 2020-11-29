@@ -100,6 +100,17 @@
   ignore_errors: True
   listen: grub2cfg
 
+- name: grub2cfg to /boot/efi/EFI/centos/grub.cfg
+  shell: |
+    test -f /boot/efi/EFI/centos/grub.cfg && /sbin/grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+    test -f /boot/efi/EFI/centos/grub.cfg && chown root:root /boot/efi/EFI/centos/grub.cfg
+    test -f /boot/efi/EFI/centos/grub.cfg && chmod og-rwx /boot/efi/EFI/centos/grub.cfg
+    test -f /boot/efi/EFI/centos/user.cfg && chown root:root /boot/efi/EFI/centos/user.cfg
+    test -f /boot/efi/EFI/centos/user.cfg && chmod u-x /boot/efi/EFI/centos/user.cfg
+    test -f /boot/efi/EFI/centos/user.cfg && chmod og-rwx /boot/efi/EFI/centos/user.cfg
+  ignore_errors: True
+  listen: grub2cfg
+
 - name: authselect apply-changes
   command: "authselect apply-changes"
 
