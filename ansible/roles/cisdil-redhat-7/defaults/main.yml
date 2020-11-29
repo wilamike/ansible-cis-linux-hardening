@@ -286,9 +286,13 @@ rhel7cis_xinetd_required: false
 rhel7cis_rhnsd_required: false
 
 # 1.4.2 Bootloader password
-#rhel7cis_bootloader_password: 
-rhel7cis_bootloader_password_hash: "$6$4M.OrDkIHojJm3Gc$76gyACxQ8NJSmWgTg4UI4AEtpnDRhWPYKNnHB7TTJFDT45iCGvn1fbUrDfy0m8xKSaserJ2lit8BtFMomfmnw1"
-rhel7cis_set_boot_pass: false
+# Generate encrypted password by
+#    grub2-mkpasswd-pbkdf2
+#    Enter passowrd: <password>
+#    Reenter password: <password>
+# And paste the encrypted password into variable rhel7cis_bootloader_password
+rhel7cis_bootloader_password: "grub.pbkdf2.sha512.10000.9D43FB6B4898159AD5667262D737443F16BACD69461C00B9D44D3A0AC4970A37C41300363EAD1E31B13824FB69DC279D8FC0A4E68675D6D0346B32CC9B06ABF3.CA6D518CFA510EA05CE2D6D1C5B8254BE0996A7837E0B882AE89FA5FB70059DBA76588899B76B4C9A4A77AF42878744B4A5A785378CC57434FBBAF7BD8534ACA"
+rhel7cis_set_boot_pass: true
 
 # System network parameters (host only OR host and router)
 rhel7cis_is_router: false
