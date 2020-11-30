@@ -146,6 +146,7 @@ ubuntu2004cis_rule_3_5_2_3: true
 ubuntu2004cis_rule_3_5_2_4: true
 ubuntu2004cis_rule_3_5_2_5: true
 ubuntu2004cis_rule_3_5_3_1: true
+ubuntu2004cis_rule_3_5_3_1_3: true
 ubuntu2004cis_rule_3_5_3_2: true
 ubuntu2004cis_rule_3_5_3_3: true
 ubuntu2004cis_rule_3_5_3_4: true
@@ -399,6 +400,7 @@ ubuntu2004cis_firewall: firewalld
 # 3.5.3.2 | PATCH | Ensure a table exists"
 ubuntu2004cis_nftables_table: filter
 
+ubuntu2004cis_firewall_default_zone: dmz
 ubuntu2004cis_firewall_services:
   - ssh
   - dhcpv6-client
