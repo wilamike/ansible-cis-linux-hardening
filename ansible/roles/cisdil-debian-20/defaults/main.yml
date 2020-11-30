@@ -433,8 +433,8 @@ ubuntu2004cis_sshd:
   ### Make sure you understand the precedence when working with these values!!
   # allowusers:
   # allowgroups: systems dba
-  # denyusers:
-  # denygroups:
+  denyusers: root
+  denygroups: root
 
 ubuntu2004cis_pwquality:
   - key: 'minlen'
