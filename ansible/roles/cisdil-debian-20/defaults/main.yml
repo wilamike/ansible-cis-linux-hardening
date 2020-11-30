@@ -61,7 +61,7 @@ ubuntu2004cis_rule_1_4_2: true
 ubuntu2004cis_rule_1_5_1: true
 ubuntu2004cis_rule_1_5_2: true
 ubuntu2004cis_rule_1_5_2_disable_password: true
-ubuntu2004cis_rule_1_5_3: false
+ubuntu2004cis_rule_1_5_3: true
 ubuntu2004cis_rule_1_5_4: true
 ubuntu2004cis_rule_1_6_1: true
 ubuntu2004cis_rule_1_6_2: true
@@ -332,6 +332,9 @@ ubuntu2004cis_rhnsd_required: false
 # And paste the encrypted password into variable ubuntu2004cis_bootloader_password
 ubuntu2004cis_bootloader_password: "grub.pbkdf2.sha512.10000.9E3F5956B6064BF710CB61BA8249FEE26978C4A43CAE720D40883E4DDA72EF536BB3F6D10894DBB7975C84EDC52172C5D918E73580F19D6F69F0E70EB7D90B31.C87F851DA77E0A5ED65FB8D0AE1D5B6C7FD8EC57D3D0FCFF05D52E7522B4E17FC0EFA10DF2EBE786EE12AE2E8B8E47BBE9DDEFD8FFFD9D674B4C34B109F99847"
 ubuntu2004cis_set_boot_pass: true
+
+# Root password for single user mode authentication
+ubuntu2004cis_root_password: ""
 
 # System network parameters (host only OR host and router)
 ubuntu2004cis_is_router: false

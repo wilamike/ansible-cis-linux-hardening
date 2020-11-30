@@ -800,7 +800,8 @@
       executable: /bin/bash
   when:
       - ubuntu2004cis_rule_1_5_3
-      - current_root_password.stdout | length > 0
+      - ubuntu2004cis_root_password | length > 0
+#      - current_root_password.stdout | length > 0
   tags:
       - level1
       - scored
