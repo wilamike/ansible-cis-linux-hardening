@@ -780,24 +780,24 @@
         state: present
         dest: /etc/bash.bashrc
         create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ ubuntu2004cis_shell_timeout }}"
+        regexp: '(^TMOUT=|^readonly TMOUT)'
+        line: "if [ -z \"$TMOUT\" ] || [ \"$TMOUT\" -gt \"{{ ubuntu2004cis_shell_timeout }}\" ]; then readonly TMOUT={{ ubuntu2004cis_shell_timeout }}; export TMOUT; fi"
 
     - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile"
       lineinfile:
         state: present
         dest: /etc/profile
         create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ ubuntu2004cis_shell_timeout }}"
+        regexp: '(^TMOUT=|^readonly TMOUT)'
+        line: "if [ -z \"$TMOUT\" ] || [ \"$TMOUT\" -gt \"{{ ubuntu2004cis_shell_timeout }}\" ]; then readonly TMOUT={{ ubuntu2004cis_shell_timeout }}; export TMOUT; fi"
 
     - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile.d/99-tmout.sh"
       lineinfile:
         state: present
         dest: /etc/profile.d/99-tmout.sh
         create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ ubuntu2004cis_shell_timeout }}"
+        regexp: '(^TMOUT=|^readonly TMOUT)'
+        line: "if [ -z \"$TMOUT\" ] || [ \"$TMOUT\" -gt \"{{ ubuntu2004cis_shell_timeout }}\" ]; then readonly TMOUT={{ ubuntu2004cis_shell_timeout }}; export TMOUT; fi"
   when:
     - ubuntu2004cis_rule_5_4_5
   tags:
