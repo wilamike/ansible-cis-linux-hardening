@@ -462,6 +462,10 @@ ubuntu2004cis_shell_timeout: 900
 ubuntu2004cis_syslog: rsyslog
 # ubuntu2004cis_syslog: syslog-ng
 
+ubuntu2004cis_rsyslog_destination:
+  - localhost
+  - 192.168.0.1
+
 ubuntu2004cis_tmp:
   source: tmpfs
   fstype: tmpfs

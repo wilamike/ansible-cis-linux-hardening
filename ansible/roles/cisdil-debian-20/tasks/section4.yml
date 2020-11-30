@@ -491,8 +491,10 @@
       - rule_4.2.1.4
 
 - name: "SCORED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
-  command: /bin/true
-  changed_when: false
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    line: "*.*    @@{{ item }}"
+  loop: "{{ ubuntu2004cis_rsyslog_destination }}"
   when:
       - ubuntu2004cis_rule_4_2_1_5
   tags:
