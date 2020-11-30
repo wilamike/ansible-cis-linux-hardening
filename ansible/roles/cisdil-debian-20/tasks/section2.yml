@@ -678,6 +678,21 @@
     - patch
     - rule_2.2.16
 
+- name: "SCORED | 2.2.16 | PATCH | Ensure rsync service is removed"
+  apt:
+    name: rsync
+    state: absent
+  when:
+    - not ubuntu2004cis_rsyncd_server
+    - ubuntu2004cis_rule_2_2_16
+  tags:
+    - level1
+    - scored
+    - rsync
+    - services
+    - patch
+    - rule_2.2.16
+
 - name: "SCORED | 2.2.17 | PATCH | Ensure NIS Server is not enabled"
   service:
       name: nis
