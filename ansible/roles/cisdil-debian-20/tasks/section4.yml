@@ -459,8 +459,13 @@
       - rule_4.2.1.2
 
 - name: "NOTSCORED | 4.2.1.3 | PATCH | Ensure logging is configured"
-  command: /bin/true
-  changed_when: false
+  copy:
+      src: etc/rsyslog.d/10-cis-hardening.conf
+      dest: /etc/rsyslog.d/10-cis-hardening.conf
+      owner: root
+      group: root
+      mode: '0644'
+  notify: restart rsyslog
   when:
       - ubuntu2004cis_rule_4_2_1_3
   tags:
