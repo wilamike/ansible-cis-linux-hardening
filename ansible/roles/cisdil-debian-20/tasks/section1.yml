@@ -753,36 +753,17 @@
       - patch
       - rule_1.5.1
 
-- name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set - generate password"
-  shell: "set -o pipefail;
-        if [ '{{ ubuntu2004cis_bootloader_password }}' == 'random' ];
-        then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c12); else PASSWORD='{{ ubuntu2004cis_bootloader_password }}';
-        fi;
-        echo -e \"$PASSWORD\n$PASSWORD\" | grub-mkpasswd-pbkdf2 | awk '/grub.pbkdf/{print$NF}'"
-  register: grub_pass
-  args:
-      executable: /bin/bash
-  when:
-      - ubuntu2004cis_set_boot_pass
-      - ubuntu2004cis_rule_1_5_2
-  tags:
-      - level1
-      - scored
-      - grub
-      - patch
-      - rule_1.5.2
-      - notimplemented
-
 - name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set - generate config"
-  copy:
+  template:
+      src: etc/grub.d/00_password.j2
       dest: /etc/grub.d/00_password
-      content: "cat << EOF\nset superusers=\"root\"\npassword_pbkdf2 root {{ grub_pass.stdout }}\nEOF"
       owner: root
       group: root
       mode: 0755
   notify: generate new grub config
   when:
-      - ubuntu2004cis_set_boot_pass and grub_pass is defined and grub_pass.stdout is defined and grub_pass.stdout | length >0
+      - ubuntu2004cis_set_boot_pass
+      - ubuntu2004cis_bootloader_password | length > 0
       - ubuntu2004cis_rule_1_5_2
   tags:
       - level1
@@ -792,15 +773,16 @@
       - rule_1.5.2
 
 - name: "SCORED | 1.5.2 | PATCH | Ensure bootloader password is set - disable password for system boot"
-  replace:
-      path: /etc/grub.d/10_linux
-      regexp: '--class os"'
-      replace: '--class os --unrestricted"'
+  lineinfile:
+      dest: /etc/grub.d/10_linux
+      regexp: '^(CLASS=.*(?!.*--unrestricted)\"[^\"]+)(\".*)'
+      line: '\1 --unrestricted\2'
+      backrefs: yes
   notify: generate new grub config
   when:
       - ubuntu2004cis_set_boot_pass
+      - ubuntu2004cis_bootloader_password | length > 0
       - ubuntu2004cis_rule_1_5_2
-      - ubuntu2004cis_rule_1_5_2_disable_password
   tags:
       - level1
       - scored
@@ -943,11 +925,10 @@
 
 - name: "SCORED | 1.7.1.1 | PATCH | Ensure AppArmor is installed"
   apt:
-      name: '{{ item }}'
+      name:
+          - apparmor
+          - apparmor-utils
       state: present
-  with_items:
-   - apparmor
-   - apparmor-utils
   when:
       - ubuntu2004cis_rule_1_7_1_1
   tags:
