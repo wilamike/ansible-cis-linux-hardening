@@ -452,11 +452,20 @@ ubuntu2004cis_shell_timeout: 900
 ubuntu2004cis_syslog: rsyslog
 # ubuntu2004cis_syslog: syslog-ng
 
+ubuntu2004cis_tmp:
+  source: tmpfs
+  fstype: tmpfs
+  opts: "defaults,nodev,nosuid,noexec"
+  enabled: true
+
 ubuntu2004cis_vartmp:
   source: /tmp
   fstype: false
-  opts: "defaults, nodev, nosuid, noexec, bind"
+  opts: "defaults,nodev,nosuid,noexec,bind"
   enabled: false
+
+ubuntu2004cis_devshm:
+  opts: "defaults,nodev,nosuid,noexec"
 
 # Apply upgrades (set to false if another patching system is in place)
 ubuntu2004cis_apply_upgrades: true
