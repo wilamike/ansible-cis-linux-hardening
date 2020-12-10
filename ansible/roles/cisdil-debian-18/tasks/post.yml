@@ -1,6 +1,11 @@
 ---
 # Post tasks
 
+- name: "POST | Revert hostname if changed during role execution"
+  hostname:
+      name: "{{ original_hostname }}"
+  when: ansible_hostname != original_hostname
+
 #- name: "POST | Find removed but configured apt packages"
 #  shell: "set -o pipefail;
 #      dpkg --list | (grep ^rc || true) | tr -s ' ' | cut -d ' ' -f 2"
