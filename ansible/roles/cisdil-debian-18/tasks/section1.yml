@@ -811,13 +811,32 @@
       - patch
       - rule_1.5.2
 
+#- name: "SCORED | 1.5.3 | PATCH | Ensure authentication required for single user mode"
+#  shell: 'echo \"root:{{ ubuntu1804cis_root_password }}\" | chpasswd'
+#  args:
+#      executable: /bin/bash
+#  when:
+#      - ubuntu1804cis_rule_1_5_3
+#      - current_root_password.stdout | length > 0
+#  tags:
+#      - level1
+#      - scored
+#      - patch
+#      - rule_1.5.3
+#      - notimplemented
+
 - name: "SCORED | 1.5.3 | PATCH | Ensure authentication required for single user mode"
-  shell: 'echo \"root:{{ ubuntu1804cis_root_password }}\" | chpasswd'
+  shell: "set -o pipefail;
+          if [ '{{ ubuntu1804cis_root_password }}' == 'random' ];
+          then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c24); else PASSWORD='{{ ubuntu1804cis_root_password }}';
+          fi;
+          echo \"root:$PASSWORD\" | chpasswd"
   args:
       executable: /bin/bash
   when:
       - ubuntu1804cis_rule_1_5_3
-      - current_root_password.stdout | length > 0
+      - ubuntu1804cis_root_password | length > 0
+#      - current_root_password.stdout | length > 0
   tags:
       - level1
       - scored
