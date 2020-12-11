@@ -682,6 +682,7 @@
   apt:
     name: rsync
     state: absent
+    purge: True
   when:
     - not ubuntu2004cis_rsyncd_server
     - ubuntu2004cis_rule_2_2_16
@@ -753,6 +754,7 @@
   apt:
       name: telnet
       state: absent
+      purge: True
   when:
       - not ubuntu2004cis_telnet_required
       - ubuntu2004cis_rule_2_3_4
