@@ -322,6 +322,16 @@
   changed_when: false
   check_mode: false
 
+- name: "PRELIM | Check for ufw service"
+  shell: |
+      set -o pipefail
+      systemctl show ufw | grep LoadState | cut -d = -f 2
+  args:
+      executable: /bin/bash
+  register: ufw_service_status
+  changed_when: false
+  check_mode: false
+
 - name: "PRELIM | Check the grub.cfg configuration"
   stat:
     path: /boot/grub/grub.cfg
