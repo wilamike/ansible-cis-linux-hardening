@@ -590,6 +590,7 @@
   apt:
       name: ufw
       state: absent
+      purge: True
   when:
      - ubuntu2004cis_rule_3_5_3_1_3
      - ubuntu2004cis_firewall != "ufw"
