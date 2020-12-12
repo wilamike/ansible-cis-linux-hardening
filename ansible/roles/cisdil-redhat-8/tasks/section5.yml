@@ -763,7 +763,7 @@
       lineinfile:
         path: "{{ item }}"
         insertbefore: '^password(\s+)requisite(\s+)(.*)$'
-        line: "password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3"
+        line: "password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3 enforce_for_root"
         state: present
       loop:
         - /etc/authselect/custom/custom-profile/system-auth
