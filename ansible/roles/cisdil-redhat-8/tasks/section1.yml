@@ -435,7 +435,7 @@
       - usb
 
 - name: "NOTSCORED | 1.2.5 | PATCH | Ensure package manager repositories are configured"
-  command: yum check-update
+  command: yum check-update -y
   args:
       warn: false
   register: yum_configured
